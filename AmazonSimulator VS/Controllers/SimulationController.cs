@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-
 using Models;
 using Views;
 
-namespace Controllers
+namespace AmazonSimulator.Controllers
 {
-
     struct ObservingClient
     {
         public ClientView cv;
@@ -16,14 +14,14 @@ namespace Controllers
 
     public class SimulationController
     {
-        private World world;
+        private WorldModel world;
         private List<ObservingClient> views = new List<ObservingClient>();
         private bool running = false;
         private int tickRate = 50;
 
-        public SimulationController(World w)
+        public SimulationController(WorldModel w)
         {
-            this.world = w;
+            world = w;
         }
 
         public void AddView(ClientView v)

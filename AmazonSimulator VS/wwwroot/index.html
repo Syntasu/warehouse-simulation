@@ -63,11 +63,12 @@
             exampleSocket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client");
             exampleSocket.onmessage = function (event) {
                 var command = parseCommand(event.data);
+                console.log(event.data);
 
                 if (command.command == "update") {
                     if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
-                        if (command.parameters.type == "robot") {
-                            var geometry = new THREE.BoxGeometry(0.9, 0.3, 0.9);
+                        if (command.parameters.Type == "robot") {
+                            var geometry = new THREE.BoxGeometry(0.9, 0.31, 0.9);
                             var cubeMaterials = [
                                 new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_side.png"), side: THREE.DoubleSide }), //LEFT
                                 new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_side.png"), side: THREE.DoubleSide }), //RIGHT
@@ -90,13 +91,13 @@
 
                     var object = worldObjects[command.parameters.guid];
 
-                    object.position.x = command.parameters.x;
-                    object.position.y = command.parameters.y;
-                    object.position.z = command.parameters.z;
+                    object.position.x = command.parameters.Position.X;
+                    object.position.y = command.parameters.Position.Y;
+                    object.position.z = command.parameters.Position.Z;
 
-                    object.rotation.x = command.parameters.rotationX;
-                    object.rotation.y = command.parameters.rotationY;
-                    object.rotation.z = command.parameters.rotationZ;
+                    object.rotation.x = command.parameters.Rotation.X;
+                    object.rotation.y = command.parameters.Rotation.Y;
+                    object.rotation.z = command.parameters.Rotation.Z;
                 }
             }
 

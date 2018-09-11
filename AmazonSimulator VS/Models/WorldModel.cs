@@ -1,25 +1,29 @@
 using System;
 using System.Collections.Generic;
+using AmazonSimulator.Data;
+using AmazonSimulator.Models;
 using Controllers;
 
 namespace Models
 {
-    public class World : IObservable<Command>, IUpdatable
+    public class WorldModel : IObservable<Command>, IUpdatable
     {
-        private List<Robot> worldObjects = new List<Robot>();
+        private List<EntityModel> entities = new List<EntityModel>();
         private List<IObserver<Command>> observers = new List<IObserver<Command>>();
 
-        public World()
+        public WorldModel()
         {
-            Robot r = CreateRobot(0, 0, 0);
-            r.Move(4.6, 0, 13);
+            RobotModel robot = CreateEntity<RobotModel>();
+            robot.SetEntityPosition(new Vector3(0.0f, 0.0f, 0.0f));
+            robot.SetEntityRotation(new Vector3(4.6f, 0.0f, 13.0f));
+
         }
 
-        private Robot CreateRobot(double x, double y, double z)
+        private T CreateEntity<T>() where T : EntityModel
         {
-            Robot r = new Robot("Mr Roboto", x, y, z, 0, 0, 0);
-            worldObjects.Add(r);
-            return r;
+            EntityModel entity = new EntityModel(EntityType.Entity);
+            entities.Add(entity);
+            return entity as T;
         }
 
         public IDisposable Subscribe(IObserver<Command> observer)
@@ -35,15 +39,15 @@ namespace Models
 
         private void SendCommandToObservers(Command c)
         {
-            for (int i = 0; i < this.observers.Count; i++)
+            for (int i = 0; i < observers.Count; i++)
             {
-                this.observers[i].OnNext(c);
+                observers[i].OnNext(c);
             }
         }
 
         private void SendCreationCommandsToObserver(IObserver<Command> obs)
         {
-            foreach (Robot m3d in worldObjects)
+            foreach (RobotModel m3d in entities)
             {
                 obs.OnNext(new UpdateModel3DCommand(m3d));
             }
@@ -51,17 +55,17 @@ namespace Models
 
         public bool Update(int tick)
         {
-            for (int i = 0; i < worldObjects.Count; i++)
+            for (int i = 0; i < entities.Count; i++)
             {
-                Robot u = worldObjects[i];
+                EntityModel entity = entities[i];
 
-                if (u is IUpdatable)
+                if (entity is IUpdatable)
                 {
-                    bool needsCommand = ((IUpdatable)u).Update(tick);
+                    bool needsCommand = ((IUpdatable)entity).Update(tick);
 
                     if (needsCommand)
                     {
-                        SendCommandToObservers(new UpdateModel3DCommand(u));
+                        //SendCommandToObservers(new UpdateModel3DCommand(entity));
                     }
                 }
             }
@@ -77,8 +81,8 @@ namespace Models
 
         internal Unsubscriber(List<IObserver<Command>> observers, IObserver<Command> observer)
         {
-            this._observers = observers;
-            this._observer = observer;
+            _observers = observers;
+            _observer = observer;
         }
 
         public void Dispose()

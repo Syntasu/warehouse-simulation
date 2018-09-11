@@ -4,10 +4,8 @@ using Newtonsoft.Json;
 
 namespace Controllers
 {
-
     public abstract class Command
     {
-
         private string type;
         private Object parameters;
 
@@ -30,7 +28,7 @@ namespace Controllers
     public abstract class Model3DCommand : Command
     {
 
-        public Model3DCommand(string type, Robot parameters) : base(type, parameters)
+        public Model3DCommand(string type, RobotModel parameters) : base(type, parameters)
         {
         }
     }
@@ -38,7 +36,7 @@ namespace Controllers
     public class UpdateModel3DCommand : Model3DCommand
     {
 
-        public UpdateModel3DCommand(Robot parameters) : base("update", parameters)
+        public UpdateModel3DCommand(RobotModel parameters) : base("update", parameters)
         {
         }
     }

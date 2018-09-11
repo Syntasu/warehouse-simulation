@@ -1,6 +1,5 @@
 ﻿using System.Net.WebSockets;
 using System.Threading;
-using Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.StaticFiles;
@@ -10,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Views;
 using Models;
 
+using AmazonSimulator.Controllers;
+
 namespace AmazonSimulator_VS
 {
     public class Startup
@@ -18,7 +19,7 @@ namespace AmazonSimulator_VS
 
         public Startup(IConfiguration configuration)
         {
-            simulationController = new SimulationController(new World());
+            simulationController = new SimulationController(new WorldModel());
 
             Thread InstanceCaller = new Thread(
                 new ThreadStart(simulationController.Simulate));
