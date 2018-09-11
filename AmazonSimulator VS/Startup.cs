@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.WebSockets;
+﻿using System.Net.WebSockets;
 using System.Threading;
-using System.Threading.Tasks;
 using Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using Views;
+using Models;
 
 namespace AmazonSimulator_VS
 {
@@ -20,14 +18,12 @@ namespace AmazonSimulator_VS
 
         public Startup(IConfiguration configuration)
         {
-            simulationController = new SimulationController(new Models.World());
+            simulationController = new SimulationController(new World());
 
             Thread InstanceCaller = new Thread(
                 new ThreadStart(simulationController.Simulate));
 
-            // Start the thread.
             InstanceCaller.Start();
-
             Configuration = configuration;
         }
 
@@ -45,7 +41,6 @@ namespace AmazonSimulator_VS
             app.UseDefaultFiles();
 
             var provider = new FileExtensionContentTypeProvider();
-            // Add new mappings
             provider.Mappings[".mtl"] = "text/plain";
             provider.Mappings[".obj"] = "text/plain";
 

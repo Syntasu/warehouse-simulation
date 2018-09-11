@@ -1,55 +1,68 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
+
 using Models;
 using Views;
 
-namespace Controllers {
-    struct ObservingClient {
+namespace Controllers
+{
+
+    struct ObservingClient
+    {
         public ClientView cv;
         public IDisposable unsubscribe;
     }
-    public class SimulationController {
-        private World w;
+
+    public class SimulationController
+    {
+        private World world;
         private List<ObservingClient> views = new List<ObservingClient>();
         private bool running = false;
-        private int tickTime = 50;
+        private int tickRate = 50;
 
-        public SimulationController(World w) {
-            this.w = w;
+        public SimulationController(World w)
+        {
+            this.world = w;
         }
 
-        public void AddView(ClientView v) {
+        public void AddView(ClientView v)
+        {
             ObservingClient oc = new ObservingClient();
 
-            oc.unsubscribe = this.w.Subscribe(v);
+            oc.unsubscribe = world.Subscribe(v);
             oc.cv = v;
 
             views.Add(oc);
         }
 
-        public void RemoveView(ClientView v) {
-            for(int i = 0; i < views.Count; i++) {
+        public void RemoveView(ClientView v)
+        {
+            for (int i = 0; i < views.Count; i++)
+            {
                 ObservingClient currentOC = views[i];
 
-                if(currentOC.cv == v) {
+                if (currentOC.cv == v)
+                {
                     views.Remove(currentOC);
                     currentOC.unsubscribe.Dispose();
                 }
             }
         }
 
-        public void Simulate() {
+        public void Simulate()
+        {
             running = true;
 
-            while(running) {
-                w.Update(tickTime);
-                Thread.Sleep(tickTime);
+            while (running)
+            {
+                world.Update(tickRate);
+                Thread.Sleep(tickRate);
             }
         }
 
-        public void EndSimulation() {
+        public void EndSimulation()
+        {
             running = false;
         }
     }

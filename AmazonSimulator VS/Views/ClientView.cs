@@ -1,14 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using System.Text;
 using Controllers;
 
-namespace Views {
-    public class ClientView : IObserver<Command> {
+namespace Views
+{
+    public class ClientView : IObserver<Command>
+    {
         private WebSocket socket;
 
         public ClientView(WebSocket socket)
@@ -16,7 +16,8 @@ namespace Views {
             this.socket = socket;
         }
 
-        public async Task StartReceiving() {
+        public async Task StartReceiving()
+        {
             var buffer = new byte[1024 * 4];
 
             Console.WriteLine("ClientView connection started");
@@ -34,16 +35,22 @@ namespace Views {
             await socket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
         }
 
-        private async void SendMessage(string message) {
+        private async void SendMessage(string message)
+        {
             byte[] buffer = Encoding.UTF8.GetBytes(message);
-            try {
+
+            try
+            {
                 await socket.SendAsync(new ArraySegment<byte>(buffer, 0, message.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-            } catch(Exception e) {
+            }
+            catch (Exception)
+            {
                 Console.WriteLine("Error while sending information to client, probably a Socket disconnect");
             }
         }
 
-        public void SendCommand(Command c) {
+        public void SendCommand(Command c)
+        {
             SendMessage(c.ToJson());
         }
 
