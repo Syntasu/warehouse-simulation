@@ -2,6 +2,10 @@
 {
     public abstract class Observer
     {
-        public abstract void OnObservableChanged(dynamic payload);
+        /// <summary>
+        ///     A method that gets called when the observable changed.
+        /// </summary>
+        /// <param name="payload">The arguments given from the observable.</param>
+        public abstract void ObservableChanged(dynamic payload);
     }
 }

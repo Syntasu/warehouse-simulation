@@ -15,11 +15,18 @@ namespace AmazonSimulator.Framework
             }
             set
             {
+                //RESEARCH: Do we really need to check for 
+                if (_value == value) return;
+
                 _value = value;
                 callback?.Invoke(this);
             }
         }
-
+            
+        /// <summary>
+        ///     Callback to the model that has this ModelData.
+        ///     
+        /// </summary>
         Action<ModelData> callback = null;
 
         public ModelData(string name, dynamic value = null)
@@ -28,6 +35,10 @@ namespace AmazonSimulator.Framework
             _value = value;
         }
 
+        /// <summary>
+        ///     Set the model we should push the model data changes to.
+        /// </summary>
+        /// <param name="model">A model to listen for changes</param>
         public void SetModel(IModel model)
         {
             callback = model.OnModelDataChanged;

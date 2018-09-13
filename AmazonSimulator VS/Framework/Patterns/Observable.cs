@@ -4,6 +4,9 @@ namespace AmazonSimulator.Framework.Patterns
 {
     public class Observable
     {
+        /// <summary>
+        ///     A collection of observers currently observing this observable.
+        /// </summary>
         private List<Observer> observers = new List<Observer>();
 
         /// <summary>
@@ -23,7 +26,7 @@ namespace AmazonSimulator.Framework.Patterns
         {
             foreach (Observer observer in observers)
             {
-                observer.OnObservableChanged(payload);
+                observer.ObservableChanged(payload);
             }
         }
     }

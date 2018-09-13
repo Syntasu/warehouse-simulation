@@ -22,7 +22,7 @@ namespace AmazonSimulator.Models
         public EntityModel(EntityType type = EntityType.Entity)
         {
             Type.Value = type;
-            RegisterData(Id, Type, Position, Rotation);
+            RegisterModelData(Id, Type, Position, Rotation);
         }
 
         public void SetEntityPosition(Vector3 position)

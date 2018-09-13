@@ -1,5 +1,8 @@
 ﻿namespace AmazonSimulator.Data
 {
+    /// <summary>
+    ///     A 3 dimensional vector.
+    /// </summary>
     public class Vector3
     {
         public float X = 0.0f;
