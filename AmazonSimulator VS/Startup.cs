@@ -19,7 +19,7 @@ namespace AmazonSimulator_VS
 
         public Startup(IConfiguration configuration)
         {
-            simulationController = new SimulationController(new WorldModel());
+            simulationController = new SimulationController(new _WorldModel());
 
             Thread InstanceCaller = new Thread(
                 new ThreadStart(simulationController.Simulate));

@@ -1,6 +1,6 @@
 ﻿namespace AmazonSimulator.Framework
 {
-    public interface IModel
+    public interface IModelDataListener
     {
         void OnModelDataChanged(ModelData data);
     }

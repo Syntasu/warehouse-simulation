@@ -5,6 +5,8 @@
     /// </summary>
     public class Vector3
     {
+        public static Vector3 Zero => new Vector3(0.0f, 0.0f, 0.0f);
+
         public float X = 0.0f;
         public float Y = 0.0f;
         public float Z = 0.0f;

@@ -14,12 +14,12 @@ namespace AmazonSimulator.Controllers
 
     public class SimulationController
     {
-        private WorldModel world;
+        private _WorldModel world;
         private List<ObservingClient> views = new List<ObservingClient>();
         private bool running = false;
         private int tickRate = 50;
 
-        public SimulationController(WorldModel w)
+        public SimulationController(_WorldModel w)
         {
             world = w;
         }

@@ -39,7 +39,7 @@ namespace AmazonSimulator.Framework
         ///     Set the model we should push the model data changes to.
         /// </summary>
         /// <param name="model">A model to listen for changes</param>
-        public void SetModel(IModel model)
+        public void SetModel(IModelDataListener model)
         {
             callback = model.OnModelDataChanged;
         }

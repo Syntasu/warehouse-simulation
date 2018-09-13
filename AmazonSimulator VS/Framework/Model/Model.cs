@@ -5,7 +5,7 @@ using System.Dynamic;
 
 namespace AmazonSimulator.Framework
 {
-    public class Model : Observable, IModel
+    public class Model : Observable, IModelDataListener
     {
         /// <summary>
         ///     A collection of all the data that is available in the model.
