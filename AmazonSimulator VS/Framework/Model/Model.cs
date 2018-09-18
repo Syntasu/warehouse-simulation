@@ -1,6 +1,5 @@
 ﻿using AmazonSimulator.Framework.Data;
 using AmazonSimulator.Framework.Patterns;
-
 using System.Collections.Generic;
 using System.Dynamic;
 
@@ -12,6 +11,16 @@ namespace AmazonSimulator.Framework
         ///     A collection of all the data that is available in the model.
         /// </summary>
         private List<ModelData> data = new List<ModelData>();
+
+        /// <summary>
+        ///     Mark this model as a child of another model.
+        ///     This needs to be done to propagate any changes from the child model.
+        /// </summary>
+        /// <param name="model"></param>
+        public void SetParentModel(Model model)
+        {
+
+        }
 
         /// <summary>
         ///     Register a field or multiple fields to the model.

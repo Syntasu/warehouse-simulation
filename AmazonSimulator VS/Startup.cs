@@ -17,7 +17,7 @@ namespace AmazonSimulator_VS
         public static _SimulationController _simulationController;
 
         private static SimulationController simulationController;
-        private NetworkView networkView;
+        private NetworkView networkView = new NetworkView();
 
         public Startup(IConfiguration configuration)
         {
@@ -26,12 +26,6 @@ namespace AmazonSimulator_VS
             simulationController.AddView(networkView);
             simulationController.Start();
 
-            //simulationController = new _SimulationController(new _WorldModel());
-
-            //Thread InstanceCaller = new Thread(
-            //    new ThreadStart(simulationController.Simulate));
-
-            //InstanceCaller.Start();
             Configuration = configuration;
         }
 
@@ -53,44 +47,11 @@ namespace AmazonSimulator_VS
 
             app.UseWebSockets();
             app.Use(networkView.HandleRequest);
-            //app.Use(async (context, next) =>
-            //{
-            //    if (context.Request.Path == "/connect_client")
-            //    {
-            //        if (context.WebSockets.IsWebSocketRequest)
-            //        {
-            //            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-
-            //            ClientView cs = new ClientView(webSocket);
-            //            simulationController.AddView(cs);
-            //            await cs.StartReceiving();
-            //            simulationController.RemoveView(cs);
-            //        }
-            //        else
-            //        {
-            //            context.Response.StatusCode = 400;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        await next();
-            //    }
-
-            //});
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                //app.UseHsts();
-            }
-
-            //app.UseHttpsRedirection();
-            //app.UseMvc();
-
-            //app.UseDirectoryBrowser(new DirectoryBrowserOptions());
         }
     }
 }

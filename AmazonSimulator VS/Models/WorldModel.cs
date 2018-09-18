@@ -7,20 +7,20 @@ namespace AmazonSimulator.Models
 {
     public class WorldModel : Model
     {
-        public ModelData Entities = new ModelData("entities", new List<EntityModel>());
+        public ModelData Entities = new ModelData("entities", new List<Entity>());
 
         public WorldModel()
         {
             RegisterModelData(Entities);
         }
 
-        public void AddEntity<T>(Vector3 position, Vector3 rotation) where T : EntityModel
+        public void AddEntity<T>(Vector3 position, Vector3 rotation) where T : Entity
         {
-            EntityModel entity = (EntityModel)Activator.CreateInstance(typeof(T), new object[] { });
-            entity.SetEntityPosition(position);
-            entity.SetEntityRotation(rotation);
+            T entityModel = (T)Activator.CreateInstance(typeof(T), new object[] { });
+            entityModel.SetEntityPosition(position);
+            entityModel.SetEntityRotation(rotation);
 
-            Entities.Value.Add(entity);
+            Entities.Value.Add(entityModel);
         }
     }
 }

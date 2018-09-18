@@ -9,6 +9,10 @@ namespace AmazonSimulator.Framework
         private List<Observable> models = new List<Observable>();
         private List<Observable> views  = new List<Observable>();
 
+        /// <summary>
+        ///     Add a new model to this controller.
+        /// </summary>
+        /// <param name="model">Model instance we want to add.</param>
         public void AddModel(Model model)
         {
             model.Subscribe(this);

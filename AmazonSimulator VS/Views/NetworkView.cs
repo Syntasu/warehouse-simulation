@@ -1,4 +1,5 @@
-﻿using AmazonSimulator.Framework;
+﻿using AmazonSimulator.Commands;
+using AmazonSimulator.Framework;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net.WebSockets;
@@ -19,7 +20,7 @@ namespace AmazonSimulator.Views
                 if (context.WebSockets.IsWebSocketRequest)
                 {
                     socket = await context.WebSockets.AcceptWebSocketAsync();
-                    await StartReceiving();
+                    await Receive();
                 }
                 else
                 {
@@ -32,26 +33,27 @@ namespace AmazonSimulator.Views
             }
         }
 
-        public async Task StartReceiving()
+        public async Task Receive()
         {
-            var buffer = new byte[1024 * 4];
-
-            Console.WriteLine("ClientView connection started");
+            byte[] buffer = new byte[4096];
 
             WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
             while (!result.CloseStatus.HasValue)
             {
+                result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
                 Console.WriteLine("Received the following information from client: " + Encoding.UTF8.GetString(buffer));
 
-                result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            }
+                string json = Encoding.UTF8.GetString(buffer);
+                NetCommand command = NetCommand.FromJson(json);
 
-            Console.WriteLine("ClientView has disconnected");
+            }
 
             await socket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
         }
 
-        private async void SendMessage(string message)
+        private async void Send(string message)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(message);
 

@@ -29,7 +29,7 @@ namespace AmazonSimulator.Framework
         ///     Callback to the model that has this ModelData.
         ///     
         /// </summary>
-        Action<ModelData> callback = null;
+        private Action<ModelData> callback = null;
 
         public ModelData(string name, dynamic value = null)
         {

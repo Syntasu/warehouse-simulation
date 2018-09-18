@@ -1,5 +1,7 @@
-﻿using AmazonSimulator.Framework;
+﻿using AmazonSimulator.Data;
+using AmazonSimulator.Framework;
 using AmazonSimulator.Models;
+using Models;
 using System.Threading;
 
 namespace AmazonSimulator.Controllers
@@ -7,7 +9,7 @@ namespace AmazonSimulator.Controllers
     public class SimulationController : Controller
     {
         private bool isRunning = false;
-        private float tickRate = 1000 / 60;
+        private ulong tickCount = 0;
         private Thread simulationThread;
 
         /// <summary>
@@ -23,6 +25,8 @@ namespace AmazonSimulator.Controllers
                     while (isRunning)
                     {
                         ProcessFrame();
+                        tickCount++;
+                        Thread.Sleep(1000/3);
                     }
                 });
             }
@@ -61,10 +65,14 @@ namespace AmazonSimulator.Controllers
         /// </summary>
         public void ProcessFrame()
         {
+            if (tickCount == 0) InitializeSimulation();
+        }
+
+        private void InitializeSimulation()
+        {
             WorldModel model = GetModel<WorldModel>();
-            //model.RegisterModelData
-            //world.Update(tickRate);
-            //Thread.Sleep(tickRate);
+
+            model.AddEntity<Robot>(Vector3.Zero, Vector3.Zero);
         }
     }
 }

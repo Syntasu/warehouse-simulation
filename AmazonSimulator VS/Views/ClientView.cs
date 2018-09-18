@@ -3,11 +3,11 @@ using System.Threading;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using System.Text;
-using Controllers;
+using AmazonSimulator.Commands;
 
 namespace Views
 {
-    public class ClientView : IObserver<Command>
+    public class ClientView : IObserver<NetCommand>
     {
         private WebSocket socket;
 
@@ -49,7 +49,7 @@ namespace Views
             }
         }
 
-        public void SendCommand(Command c)
+        public void SendCommand(NetCommand c)
         {
             SendMessage(c.ToJson());
         }
@@ -64,7 +64,7 @@ namespace Views
             throw new NotImplementedException();
         }
 
-        public void OnNext(Command value)
+        public void OnNext(NetCommand value)
         {
             SendCommand(value);
         }

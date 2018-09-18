@@ -1,31 +1,31 @@
 using System;
 using System.Collections.Generic;
+using AmazonSimulator.Commands;
 using AmazonSimulator.Data;
 using AmazonSimulator.Models;
-using Controllers;
 
 namespace Models
 {
-    public class _WorldModel : IObservable<Command>, IUpdatable
+    public class _WorldModel : IObservable<NetCommand>, IUpdatable
     {
-        private List<EntityModel> entities = new List<EntityModel>();
-        private List<IObserver<Command>> observers = new List<IObserver<Command>>();
+        private List<Entity> entities = new List<Entity>();
+        private List<IObserver<NetCommand>> observers = new List<IObserver<NetCommand>>();
 
         public _WorldModel()
         {
-            RobotModel robot = CreateEntity<RobotModel>();
+            Robot robot = CreateEntity<Robot>();
             robot.SetEntityPosition(new Vector3(0.0f, 0.0f, 0.0f));
             robot.SetEntityRotation(new Vector3(4.6f, 0.0f, 13.0f));
         }
 
-        private T CreateEntity<T>() where T : EntityModel
+        private T CreateEntity<T>() where T : Entity
         {
-            EntityModel entity = new EntityModel(EntityType.Entity);
+            Entity entity = new Entity(EntityType.Entity);
             entities.Add(entity);
             return entity as T;
         }
 
-        public IDisposable Subscribe(IObserver<Command> observer)
+        public IDisposable Subscribe(IObserver<NetCommand> observer)
         {
             if (!observers.Contains(observer))
             {
@@ -34,10 +34,10 @@ namespace Models
                 SendCreationCommandsToObserver(observer);
             }
 
-            return new Unsubscriber<Command>(observers, observer);
+            return new Unsubscriber<NetCommand>(observers, observer);
         }
 
-        private void SendCommandToObservers(Command c)
+        private void SendCommandToObservers(NetCommand c)
         {
             for (int i = 0; i < observers.Count; i++)
             {
@@ -45,11 +45,11 @@ namespace Models
             }
         }
 
-        private void SendCreationCommandsToObserver(IObserver<Command> obs)
+        private void SendCreationCommandsToObserver(IObserver<NetCommand> obs)
         {
-            foreach (RobotModel m3d in entities)
+            foreach (Robot m3d in entities)
             {
-                obs.OnNext(new UpdateModel3DCommand(m3d));
+                //obs.OnNext(new UpdateModel3DCommand(m3d));
             }
         }
 
@@ -57,7 +57,7 @@ namespace Models
         {
             for (int i = 0; i < entities.Count; i++)
             {
-                EntityModel entity = entities[i];
+                Entity entity = entities[i];
 
                 if (entity is IUpdatable)
                 {
