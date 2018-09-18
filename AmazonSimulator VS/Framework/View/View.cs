@@ -2,7 +2,7 @@
 
 namespace AmazonSimulator.Framework
 {
-    public class View : Observable
+    public class View : ICanBeObserved
     {
         public void OnModelChanged(dynamic payload)
         {

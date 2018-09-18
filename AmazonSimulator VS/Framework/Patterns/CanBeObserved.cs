@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace AmazonSimulator.Framework.Patterns
 {
-    public class Observable
+    public class CanBeObserved
     {
         /// <summary>
         ///     A collection of observers currently observing this observable.
         /// </summary>
-        private List<Observer> observers = new List<Observer>();
+        private List<ICanObserve> observers = new List<ICanObserve>();
 
         /// <summary>
         ///     Tell a observers to receive events from this observable.
         /// </summary>
         /// <param name="observer">The observer we want to add.</param>
-        public void Subscribe(Observer observer)
+        public void Subscribe(ICanObserve observer)
         {
             observers.Add(observer);
         }
@@ -25,7 +24,7 @@ namespace AmazonSimulator.Framework.Patterns
         /// <param name="payload">Any arguments we might need to pass.</param>
         protected void Notify(dynamic payload)
         {
-            foreach (Observer observer in observers)
+            foreach (ICanObserve observer in observers)
             {
                 observer.ObservableChanged(payload);
             }

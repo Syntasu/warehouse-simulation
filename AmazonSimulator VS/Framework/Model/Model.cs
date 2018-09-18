@@ -5,48 +5,33 @@ using System.Dynamic;
 
 namespace AmazonSimulator.Framework
 {
-    public class Model : Observable, IModelDataListener
+    public class Model : CanBeObserved, ICanObserve
     {
         /// <summary>
         ///     A collection of all the data that is available in the model.
         /// </summary>
-        private List<ModelData> data = new List<ModelData>();
+        private IDictionary<string, CanBeObserved> fields = new Dictionary<string, CanBeObserved>();
 
         /// <summary>
-        ///     Mark this model as a child of another model.
-        ///     This needs to be done to propagate any changes from the child model.
-        /// </summary>
-        /// <param name="model"></param>
-        public void SetParentModel(Model model)
-        {
-
-        }
-
-        /// <summary>
-        ///     Register a field or multiple fields to the model.
-        ///     This will allow the model to receive events when data changes (observable).
-        /// </summary>
-        /// <param name="fields">The fields we want to register.</param>
-        protected void RegisterModelData(params ModelData[] fields)
-        {
-            foreach (ModelData field in fields)
-            {
-                field.SetModel(this);
-                data.Add(field);
-            }
-        }
-
-        /// <summary>
-        ///     Set a specfic data for the model by a given name.
+        ///     Set or create a piece of data for the model.
+        ///     This data will be observed by the model for any changes.
         /// </summary>
         /// <param name="name">The name of the field we want to modify.</param>
         /// <param name="value">The value we want to assign to the field.</param>
-        public void SetData(string name, dynamic value)
+        public void SetField(string name, dynamic value)
         {
-            if(TryGetData(name, out ModelData field))
+            if (!TryGetField(name, out CanBeObserved obs))
             {
-                field.Value = value;
+                observable.Subscribe(this);
+                fields.Add(name, observable)
             }
+            else
+            {
+                fields[name] = 
+            }
+
+
+
         }
 
         /// <summary>
@@ -56,7 +41,7 @@ namespace AmazonSimulator.Framework
         /// <returns>Get the data from the model by a given field.</returns>
         public ModelData GetData(string name)
         {
-            if(TryGetData(name, out ModelData field))
+            if(TryGetField(name, out ModelData field))
             {
                 return field;
             }
@@ -70,19 +55,19 @@ namespace AmazonSimulator.Framework
         /// <param name="name">Name of the field.</param>
         /// <param name="field">Out variable for the field we have (potentially) found.</param>
         /// <returns>A boolean wether the model data was found or not.</returns>
-        private bool TryGetData(string name, out ModelData field)
+        private bool TryGetField(string name, out CanBeObserved fieldInstance)
         {
-            foreach (ModelData modelData in data)
+            foreach (var field in fields)
             {
-                if(modelData.Name == name)
+                if(field.Key == name)
                 {
-                    field = modelData;
+                    fieldInstance = field.Value;
                     return true;
                 }
             }
 
-            field = null;
-            return false;
+            fieldInstance = null;
+            return 
         }
 
         /// <summary>
@@ -98,6 +83,11 @@ namespace AmazonSimulator.Framework
             payload.Value = data.Value;
 
             Notify(payload);
+        }
+
+        public void ObservableChanged(dynamic payload)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

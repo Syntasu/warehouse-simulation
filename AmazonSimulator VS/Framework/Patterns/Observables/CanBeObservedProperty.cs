@@ -2,7 +2,7 @@
 
 namespace AmazonSimulator.Framework.Patterns
 {
-    public class ObservableProperty<T> : Observable
+    public class CanBeObservedProperty<T> : CanBeObserved
     {
         private T _prop = default(T);
         public T Prop

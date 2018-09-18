@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 namespace AmazonSimulator.Framework
 {
-    public class Controller : Observer
+    public class Controller : ICanObserve
     {
-        private List<Observable> models = new List<Observable>();
-        private List<Observable> views  = new List<Observable>();
+        private List<CanBeObserved> models = new List<CanBeObserved>();
+        private List<CanBeObserved> views  = new List<CanBeObserved>();
+
 
         /// <summary>
         ///     Add a new model to this controller.
