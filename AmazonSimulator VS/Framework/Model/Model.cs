@@ -1,4 +1,5 @@
-﻿using AmazonSimulator.Framework.Patterns;
+﻿using AmazonSimulator.Framework.Data;
+using AmazonSimulator.Framework.Patterns;
 
 using System.Collections.Generic;
 using System.Dynamic;
@@ -17,7 +18,7 @@ namespace AmazonSimulator.Framework
         ///     This will allow the model to receive events when data changes (observable).
         /// </summary>
         /// <param name="fields">The fields we want to register.</param>
-        public void RegisterModelData(params ModelData[] fields)
+        protected void RegisterModelData(params ModelData[] fields)
         {
             foreach (ModelData field in fields)
             {
@@ -83,6 +84,7 @@ namespace AmazonSimulator.Framework
         public void OnModelDataChanged(ModelData data)
         {
             dynamic payload = new ExpandoObject();
+            payload.Type = MvcEventType.ModelDataChange;
             payload.Name = data.Name;
             payload.Value = data.Value;
 

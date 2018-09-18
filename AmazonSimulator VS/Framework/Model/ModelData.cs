@@ -15,7 +15,9 @@ namespace AmazonSimulator.Framework
             }
             set
             {
-                //RESEARCH: Do we really need to check for 
+                //RESEARCH: Do we really need to check for the same value?
+                //          How often would we assign the same value.
+                //          This is to prevent the callback being called when nothing was changed.
                 if (_value == value) return;
 
                 _value = value;

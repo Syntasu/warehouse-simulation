@@ -1,40 +1,41 @@
 ﻿using System.Net.WebSockets;
-using System.Threading;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 using Views;
-using Models;
 
 using AmazonSimulator.Controllers;
+using AmazonSimulator.Models;
+using AmazonSimulator.Views;
 
 namespace AmazonSimulator_VS
 {
     public class Startup
     {
-        public static SimulationController simulationController;
+        public static _SimulationController _simulationController;
+
+        private static SimulationController simulationController;
+        private NetworkView networkView;
 
         public Startup(IConfiguration configuration)
         {
-            simulationController = new SimulationController(new _WorldModel());
+            simulationController = new SimulationController();
+            simulationController.AddModel(new WorldModel());
+            simulationController.AddView(networkView);
+            simulationController.Start();
 
-            Thread InstanceCaller = new Thread(
-                new ThreadStart(simulationController.Simulate));
+            //simulationController = new _SimulationController(new _WorldModel());
 
-            InstanceCaller.Start();
+            //Thread InstanceCaller = new Thread(
+            //    new ThreadStart(simulationController.Simulate));
+
+            //InstanceCaller.Start();
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            //services.AddMvc();
-        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -51,30 +52,31 @@ namespace AmazonSimulator_VS
             });
 
             app.UseWebSockets();
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.Path == "/connect_client")
-                {
-                    if (context.WebSockets.IsWebSocketRequest)
-                    {
-                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+            app.Use(networkView.HandleRequest);
+            //app.Use(async (context, next) =>
+            //{
+            //    if (context.Request.Path == "/connect_client")
+            //    {
+            //        if (context.WebSockets.IsWebSocketRequest)
+            //        {
+            //            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
 
-                        ClientView cs = new ClientView(webSocket);
-                        simulationController.AddView(cs);
-                        await cs.StartReceiving();
-                        simulationController.RemoveView(cs);
-                    }
-                    else
-                    {
-                        context.Response.StatusCode = 400;
-                    }
-                }
-                else
-                {
-                    await next();
-                }
+            //            ClientView cs = new ClientView(webSocket);
+            //            simulationController.AddView(cs);
+            //            await cs.StartReceiving();
+            //            simulationController.RemoveView(cs);
+            //        }
+            //        else
+            //        {
+            //            context.Response.StatusCode = 400;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        await next();
+            //    }
 
-            });
+            //});
 
             if (env.IsDevelopment())
             {

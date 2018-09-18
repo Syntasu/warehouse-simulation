@@ -1,67 +1,70 @@
-using System;
-using System.Collections.Generic;
+﻿using AmazonSimulator.Framework;
+using AmazonSimulator.Models;
 using System.Threading;
-using Models;
-using Views;
 
 namespace AmazonSimulator.Controllers
 {
-    struct ObservingClient
+    public class SimulationController : Controller
     {
-        public ClientView cv;
-        public IDisposable unsubscribe;
-    }
+        private bool isRunning = false;
+        private float tickRate = 1000 / 60;
+        private Thread simulationThread;
 
-    public class SimulationController
-    {
-        private _WorldModel world;
-        private List<ObservingClient> views = new List<ObservingClient>();
-        private bool running = false;
-        private int tickRate = 50;
-
-        public SimulationController(_WorldModel w)
+        /// <summary>
+        ///     Start the simulation.
+        /// </summary>
+        public void Start()
         {
-            world = w;
-        }
-
-        public void AddView(ClientView v)
-        {
-            ObservingClient oc = new ObservingClient();
-
-            oc.unsubscribe = world.Subscribe(v);
-            oc.cv = v;
-
-            views.Add(oc);
-        }
-
-        public void RemoveView(ClientView v)
-        {
-            for (int i = 0; i < views.Count; i++)
+            if(simulationThread == null)
             {
-                ObservingClient currentOC = views[i];
-
-                if (currentOC.cv == v)
+                simulationThread = new Thread(() =>
                 {
-                    views.Remove(currentOC);
-                    currentOC.unsubscribe.Dispose();
-                }
+                    isRunning = true;
+                    while (isRunning)
+                    {
+                        ProcessFrame();
+                    }
+                });
             }
-        }
 
-        public void Simulate()
-        {
-            running = true;
-
-            while (running)
+            if(simulationThread.ThreadState != ThreadState.Running)
             {
-                world.Update(tickRate);
-                Thread.Sleep(tickRate);
+                simulationThread.Start();
+                isRunning = true;
             }
         }
 
-        public void EndSimulation()
+        /// <summary>
+        ///     Stop the simulation
+        /// </summary>
+        public void Stop()
         {
-            running = false;
+            if(simulationThread.ThreadState == ThreadState.Running)
+            {
+                isRunning = false;
+                simulationThread.Join();
+            }
+
+            simulationThread = null;
+        }
+
+        /// <summary>
+        ///     Reset the simulation.
+        /// </summary>
+        public void Reset()
+        {
+            // TODO: Reset data?
+        }
+
+        /// <summary>
+        ///     Process one frame of the simulation
+        /// </summary>
+        public void ProcessFrame()
+        {
+            WorldModel model = GetModel<WorldModel>();
+            //model.RegisterModelData
+            //world.Update(tickRate);
+            //Thread.Sleep(tickRate);
         }
     }
 }

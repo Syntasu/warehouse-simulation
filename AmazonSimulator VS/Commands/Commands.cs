@@ -35,7 +35,6 @@ namespace Controllers
 
     public class UpdateModel3DCommand : Model3DCommand
     {
-
         public UpdateModel3DCommand(RobotModel parameters) : base("update", parameters)
         {
         }

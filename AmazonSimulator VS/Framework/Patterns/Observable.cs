@@ -22,7 +22,7 @@ namespace AmazonSimulator.Framework.Patterns
         ///     Notify any observers that this observable has changed.
         /// </summary>
         /// <param name="payload">Any arguments we might need to pass.</param>
-        public void Notify(dynamic payload)
+        protected void Notify(dynamic payload)
         {
             foreach (Observer observer in observers)
             {
