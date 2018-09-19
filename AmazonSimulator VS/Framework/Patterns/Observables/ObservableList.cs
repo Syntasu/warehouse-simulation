@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using AmazonSimulator.Commands;
+using Newtonsoft.Json;
 
 using System.Collections;
 using System.Collections.Generic;
@@ -19,17 +20,14 @@ namespace AmazonSimulator.Framework.Patterns
         public void Add(T item)
         {
             State.Add(item);
-
-            dynamic payload = CreatePayload(item, "created");
-            Notify(payload);
+            Notify(new Command(item, CommandOpCodes.Created));
         }
 
         public void Clear()
         {
             foreach (T item in State)
             {
-                dynamic payload = CreatePayload(item, "deleted");
-                Notify(payload);
+                Notify(new Command(item, CommandOpCodes.Deleted));
             }
 
             State.Clear();
@@ -52,8 +50,7 @@ namespace AmazonSimulator.Framework.Patterns
 
         public bool Remove(T item)
         {
-            dynamic payload = CreatePayload(item, "deleted");
-            Notify(payload);
+            Notify(new Command(item, CommandOpCodes.Deleted));
 
             return State.Remove(item);
         }
@@ -61,18 +58,6 @@ namespace AmazonSimulator.Framework.Patterns
         IEnumerator IEnumerable.GetEnumerator()
         {
             return State.GetEnumerator();
-        }
-
-        private dynamic CreatePayload(T item, string opCode)
-        {
-            string json = JsonConvert.SerializeObject(item);
-
-            dynamic payload = new ExpandoObject();
-            payload.Name = GetType().Name;
-            payload.Operation = opCode;
-            payload.Value = item;
-
-            return payload;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace AmazonSimulator.Commands
 {
@@ -12,9 +13,9 @@ namespace AmazonSimulator.Commands
     public class Command
     {
         public dynamic Contents { get; set; }
-        public string Operation { get; set; }
+        public CommandOpCodes Operation { get; set; }
 
-        public Command(string contents, string operation)
+        public Command(dynamic contents, CommandOpCodes operation)
         {
             Contents = contents;
             Operation = operation;
@@ -25,7 +26,7 @@ namespace AmazonSimulator.Commands
             return JsonConvert.SerializeObject(new string[]
             {
                 Contents,
-                Operation
+                Operation.ToString(),
             });
         }
     }
@@ -35,8 +36,11 @@ namespace AmazonSimulator.Commands
         public static Command Create(string json)
         {
             string[] values = JsonConvert.DeserializeObject<string[]>(json);
-            return new Command(values[0], values[1]);
+
+            dynamic content = values[0];
+            CommandOpCodes opCode = (CommandOpCodes)Enum.Parse(typeof(CommandOpCodes), values[1]);
+
+            return new Command(content, opCode);
         }
     }
-
 }
