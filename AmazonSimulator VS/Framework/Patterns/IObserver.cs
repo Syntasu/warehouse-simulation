@@ -1,6 +1,6 @@
 ﻿namespace AmazonSimulator.Framework.Patterns
 {
-    public interface ICanObserve
+    public interface IObserver
     {
         /// <summary>
         ///     A method that gets called when the observable changed.

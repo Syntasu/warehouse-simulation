@@ -1,14 +1,14 @@
-﻿using AmazonSimulator.Framework.Data;
-using AmazonSimulator.Framework.Patterns;
+﻿using AmazonSimulator.Framework.Patterns;
+
+using System;
 using System.Collections.Generic;
 
 namespace AmazonSimulator.Framework
 {
-    public class Controller : ICanObserve
+    public class Controller : IObserver
     {
-        private List<CanBeObserved> models = new List<CanBeObserved>();
-        private List<CanBeObserved> views  = new List<CanBeObserved>();
-
+        private List<Observable> models = new List<Observable>();
+        //private List<Observable> views  = new List<Observable>();
 
         /// <summary>
         ///     Add a new model to this controller.
@@ -19,6 +19,7 @@ namespace AmazonSimulator.Framework
             model.Subscribe(this);
             models.Add(model);
         }
+
 
         /// <summary>
         ///     Get a model reference from the controller.
@@ -38,35 +39,39 @@ namespace AmazonSimulator.Framework
             return default(T);
         }
 
-        public void AddView(View view)
+        //public void AddView(View view)
+        //{
+        //    view.Subscribe(this);
+        //    views.Add(view);
+        //}
+
+        //public override void ObservableChanged(dynamic payload)
+        //{
+        //    MvcEventType type = (MvcEventType)payload.Type;
+
+        //    switch (type)
+        //    {
+        //        case MvcEventType.ModelDataChange:
+        //            NotifyViews(payload);
+        //            break;
+        //        case MvcEventType.ViewAction:
+        //            NotifyModels(payload);
+        //            break;
+
+        //    }
+        //}
+
+        public virtual void ObservableChanged(dynamic payload)
         {
-            view.Subscribe(this);
-            views.Add(view);
+            Console.WriteLine($"[Name: {payload.Name}, Value: {payload.Value}, Operation: {payload.Operation}]");
         }
-
-        public override void ObservableChanged(dynamic payload)
-        {
-            MvcEventType type = (MvcEventType)payload.Type;
-
-            switch (type)
-            {
-                case MvcEventType.ModelDataChange:
-                    NotifyViews(payload);
-                    break;
-                case MvcEventType.ViewAction:
-                    NotifyModels(payload);
-                    break;
-
-            }
-        }
-
-        private void NotifyViews(dynamic payload)
-        {
-            foreach (View view in views)
-            { 
-                view.OnModelChanged(payload);
-            }
-        }
+        //private void NotifyViews(dynamic payload)
+        //{
+        //    foreach (View view in views)
+        //    { 
+        //        view.OnModelChanged(payload);
+        //    }
+        //}
 
         private void NotifyModels(dynamic payload)
         {

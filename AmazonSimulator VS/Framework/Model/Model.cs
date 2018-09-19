@@ -1,93 +1,40 @@
-﻿using AmazonSimulator.Framework.Data;
-using AmazonSimulator.Framework.Patterns;
-using System.Collections.Generic;
-using System.Dynamic;
+﻿using AmazonSimulator.Framework.Patterns;
 
 namespace AmazonSimulator.Framework
 {
-    public class Model : CanBeObserved, ICanObserve
+    public class Model : Observable, IObserver
     {
         /// <summary>
-        ///     A collection of all the data that is available in the model.
+        ///     Tell the model to observe the given ObservableList.
+        ///     This piece of data is now part of the model.
         /// </summary>
-        private IDictionary<string, CanBeObserved> fields = new Dictionary<string, CanBeObserved>();
-
-        /// <summary>
-        ///     Set or create a piece of data for the model.
-        ///     This data will be observed by the model for any changes.
-        /// </summary>
-        /// <param name="name">The name of the field we want to modify.</param>
-        /// <param name="value">The value we want to assign to the field.</param>
-        public void SetField(string name, dynamic value)
+        /// <param name="observable">An observable we want to observe.</param>
+        public void ModelObserveData(Observable observable)
         {
-            if (!TryGetField(name, out CanBeObserved obs))
-            {
-                observable.Subscribe(this);
-                fields.Add(name, observable)
-            }
-            else
-            {
-                fields[name] = 
-            }
-
-
-
+            observable.Subscribe(this);
         }
 
         /// <summary>
-        ///     Fetch a field in the model by a given name.
+        ///     Tell the model to observer multiple ObservableLists.
+        ///     This piece of data will now become a part of the model data.
         /// </summary>
-        /// <param name="name">The name of the field we want to fetch.</param>
-        /// <returns>Get the data from the model by a given field.</returns>
-        public ModelData GetData(string name)
+        /// <param name="observables">An array of observables we want to observe.</param>
+        public void ModelObserveDatas(params Observable[] observables)
         {
-            if(TryGetField(name, out ModelData field))
+            foreach (Observable observable in observables)
             {
-                return field;
+                ModelObserveData(observable);
             }
-
-            return null;
         }
 
         /// <summary>
-        ///     A helper method for fetch a model data field for a given name.
+        ///     A listener for when any of the observed observables are changed.
+        ///     This method will proxy the request through to the controller (who is observing the model).
         /// </summary>
-        /// <param name="name">Name of the field.</param>
-        /// <param name="field">Out variable for the field we have (potentially) found.</param>
-        /// <returns>A boolean wether the model data was found or not.</returns>
-        private bool TryGetField(string name, out CanBeObserved fieldInstance)
-        {
-            foreach (var field in fields)
-            {
-                if(field.Key == name)
-                {
-                    fieldInstance = field.Value;
-                    return true;
-                }
-            }
-
-            fieldInstance = null;
-            return 
-        }
-
-        /// <summary>
-        ///     Called when any of the model data has changed.
-        ///     Proxy this through to the observable of the model.
-        /// </summary>
-        /// <param name="data"></param>
-        public void OnModelDataChanged(ModelData data)
-        {
-            dynamic payload = new ExpandoObject();
-            payload.Type = MvcEventType.ModelDataChange;
-            payload.Name = data.Name;
-            payload.Value = data.Value;
-
-            Notify(payload);
-        }
-
+        /// <param name="payload"></param>
         public void ObservableChanged(dynamic payload)
         {
-            throw new System.NotImplementedException();
+            Notify(payload);
         }
-    }
+    }   
 }

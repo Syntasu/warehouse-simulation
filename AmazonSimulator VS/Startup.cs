@@ -23,7 +23,7 @@ namespace AmazonSimulator_VS
         {
             simulationController = new SimulationController();
             simulationController.AddModel(new WorldModel());
-            simulationController.AddView(networkView);
+            //simulationController.AddView(networkView);
             simulationController.Start();
 
             Configuration = configuration;
