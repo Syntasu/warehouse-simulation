@@ -1,7 +1,7 @@
 ﻿using AmazonSimulator.Data;
 using AmazonSimulator.Framework;
 using AmazonSimulator.Models;
-using Models;
+
 using System.Threading;
 
 namespace AmazonSimulator.Controllers
@@ -70,9 +70,8 @@ namespace AmazonSimulator.Controllers
 
         private void InitializeSimulation()
         {
-            WorldModel model = GetModel<WorldModel>();
-
-            model.AddEntity<Robot>(Vector3.Zero, Vector3.Zero);
+            WorldModel world = GetModel<WorldModel>();
+            world.AddEntity<Robot>(Vector3.Zero, Vector3.Zero);
         }
     }
 }

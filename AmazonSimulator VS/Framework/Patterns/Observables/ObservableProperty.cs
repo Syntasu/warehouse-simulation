@@ -22,9 +22,8 @@ namespace AmazonSimulator.Framework.Patterns
                 }
 
                 dynamic payload = new ExpandoObject();
-                payload.Name = GetType().FullName;
                 payload.Operation = "modified";
-                payload.Value = State;
+                payload.Content = State;
 
                 Notify(payload);
             }

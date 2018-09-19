@@ -1,6 +1,6 @@
-﻿using AmazonSimulator.Framework.Patterns;
+﻿using AmazonSimulator.Commands;
+using AmazonSimulator.Framework.Patterns;
 
-using System;
 using System.Collections.Generic;
 
 namespace AmazonSimulator.Framework
@@ -8,7 +8,7 @@ namespace AmazonSimulator.Framework
     public class Controller : IObserver
     {
         private List<Observable> models = new List<Observable>();
-        //private List<Observable> views  = new List<Observable>();
+        private List<Observable> views  = new List<Observable>();
 
         /// <summary>
         ///     Add a new model to this controller.
@@ -20,6 +20,15 @@ namespace AmazonSimulator.Framework
             models.Add(model);
         }
 
+        /// <summary>
+        ///     Add a new view to this controller.
+        /// </summary>
+        /// <param name="view">The view instance we want to add.</param>
+        public void AddView(View view)
+        {
+            view.Subscribe(this);
+            views.Add(view);
+        }
 
         /// <summary>
         ///     Get a model reference from the controller.
@@ -39,46 +48,9 @@ namespace AmazonSimulator.Framework
             return default(T);
         }
 
-        //public void AddView(View view)
-        //{
-        //    view.Subscribe(this);
-        //    views.Add(view);
-        //}
-
-        //public override void ObservableChanged(dynamic payload)
-        //{
-        //    MvcEventType type = (MvcEventType)payload.Type;
-
-        //    switch (type)
-        //    {
-        //        case MvcEventType.ModelDataChange:
-        //            NotifyViews(payload);
-        //            break;
-        //        case MvcEventType.ViewAction:
-        //            NotifyModels(payload);
-        //            break;
-
-        //    }
-        //}
-
-        public virtual void ObservableChanged(dynamic payload)
+        public virtual void ObservableChanged(Command command)
         {
-            Console.WriteLine($"[Name: {payload.Name}, Value: {payload.Value}, Operation: {payload.Operation}]");
-        }
-        //private void NotifyViews(dynamic payload)
-        //{
-        //    foreach (View view in views)
-        //    { 
-        //        view.OnModelChanged(payload);
-        //    }
-        //}
-
-        private void NotifyModels(dynamic payload)
-        {
-            foreach (Model model in models)
-            {
-                //model.OnModelDataChanged
-            }
+            System.Console.WriteLine($"{command.ToJson()}");
         }
     }
 }

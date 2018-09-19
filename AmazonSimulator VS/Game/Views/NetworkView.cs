@@ -46,7 +46,7 @@ namespace AmazonSimulator.Views
                 Console.WriteLine("Received the following information from client: " + Encoding.UTF8.GetString(buffer));
 
                 string json = Encoding.UTF8.GetString(buffer);
-                NetCommand command = NetCommand.FromJson(json);
+                //NetCommand command = Command.FromJson(json);
 
             }
 

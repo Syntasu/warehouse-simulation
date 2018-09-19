@@ -1,10 +1,7 @@
-﻿using System.Net.WebSockets;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
-
-using Views;
 
 using AmazonSimulator.Controllers;
 using AmazonSimulator.Models;
@@ -14,8 +11,6 @@ namespace AmazonSimulator_VS
 {
     public class Startup
     {
-        public static _SimulationController _simulationController;
-
         private static SimulationController simulationController;
         private NetworkView networkView = new NetworkView();
 
@@ -23,7 +18,7 @@ namespace AmazonSimulator_VS
         {
             simulationController = new SimulationController();
             simulationController.AddModel(new WorldModel());
-            //simulationController.AddView(networkView);
+            simulationController.AddView(networkView);
             simulationController.Start();
 
             Configuration = configuration;

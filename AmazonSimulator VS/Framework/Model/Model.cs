@@ -1,4 +1,5 @@
-﻿using AmazonSimulator.Framework.Patterns;
+﻿using AmazonSimulator.Commands;
+using AmazonSimulator.Framework.Patterns;
 
 namespace AmazonSimulator.Framework
 {
@@ -32,9 +33,9 @@ namespace AmazonSimulator.Framework
         ///     This method will proxy the request through to the controller (who is observing the model).
         /// </summary>
         /// <param name="payload"></param>
-        public void ObservableChanged(dynamic payload)
+        public void ObservableChanged(Command command)
         {
-            Notify(payload);
+            Notify(command);
         }
     }   
 }

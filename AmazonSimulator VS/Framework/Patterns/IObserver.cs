@@ -1,4 +1,6 @@
-﻿namespace AmazonSimulator.Framework.Patterns
+﻿using AmazonSimulator.Commands;
+
+namespace AmazonSimulator.Framework.Patterns
 {
     public interface IObserver
     {
@@ -6,6 +8,6 @@
         ///     A method that gets called when the observable changed.
         /// </summary>
         /// <param name="payload">The arguments given from the observable.</param>
-        void ObservableChanged(dynamic payload);
+        void ObservableChanged(Command payload);
     }
 }

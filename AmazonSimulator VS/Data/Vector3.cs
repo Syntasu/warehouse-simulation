@@ -5,6 +5,9 @@
     /// </summary>
     public class Vector3
     {
+        /// <summary>
+        ///     Short hand notation to create a new vector at 0,0,0.
+        /// </summary>
         public static Vector3 Zero => new Vector3(0.0f, 0.0f, 0.0f);
 
         public float X = 0.0f;
