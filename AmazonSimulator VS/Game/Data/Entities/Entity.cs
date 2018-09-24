@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using AmazonSimulator.Framework.Patterns.Serialization;
+using Newtonsoft.Json;
 
 namespace AmazonSimulator.Data
 {
@@ -10,17 +12,15 @@ namespace AmazonSimulator.Data
         Rack
     }
 
-    public class Entity
+    public class Entity : IJsonSerializable
     {
         protected ushort Id = 0;
-        protected EntityType Type = EntityType.Entity;
         protected Vector3 Position = Vector3.Zero;
         protected Vector3 Rotation = Vector3.Zero;
 
-        public Entity(ushort id, EntityType type)
+        public Entity(ushort id)
         {
             Id = id;
-            Type = type;
         }
 
         public void SetEntityPosition(Vector3 position)
@@ -31,6 +31,15 @@ namespace AmazonSimulator.Data
         public void SetEntityRotation(Vector3 rotation)
         {
             Rotation = rotation;
+        }
+
+        public virtual string ToJson()
+        {
+            return JsonConvert.SerializeObject(new object[]{
+                Id,
+                Position,
+                Rotation
+            });
         }
     }
 }

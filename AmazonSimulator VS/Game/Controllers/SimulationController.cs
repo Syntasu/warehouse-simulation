@@ -1,7 +1,10 @@
 ﻿using AmazonSimulator.Data;
+using AmazonSimulator.Data.Entities;
 using AmazonSimulator.Framework;
+using AmazonSimulator.Framework.Patterns;
+using AmazonSimulator.Framework.Patterns.Serialization;
 using AmazonSimulator.Models;
-
+using System;
 using System.Threading;
 
 namespace AmazonSimulator.Controllers
@@ -17,6 +20,7 @@ namespace AmazonSimulator.Controllers
         /// </summary>
         public void Start()
         {
+            //If we do not have a thread, create one w/ lambda function.
             if(simulationThread == null)
             {
                 simulationThread = new Thread(() =>
@@ -29,12 +33,8 @@ namespace AmazonSimulator.Controllers
                         Thread.Sleep(1000/3);
                     }
                 });
-            }
 
-            if(simulationThread.ThreadState != ThreadState.Running)
-            {
                 simulationThread.Start();
-                isRunning = true;
             }
         }
 
@@ -68,10 +68,43 @@ namespace AmazonSimulator.Controllers
             if (tickCount == 0) InitializeSimulation();
         }
 
+        /// <summary>
+        ///     Start the simulation.
+        /// </summary>
         private void InitializeSimulation()
         {
             WorldModel world = GetModel<WorldModel>();
+
             world.AddEntity<Robot>(Vector3.Zero, Vector3.Zero);
+            world.AddEntity<Truck>(Vector3.Zero, Vector3.Zero);
+            world.AddEntity<Rack>(Vector3.Zero, Vector3.Zero);
+
+            world.SetWorldName("Hello world!");
+        }
+
+        /// <summary>
+        ///     Intercept any changes from the view or model.
+        /// </summary>
+        /// <param name="observable">The observable that was changed</param>
+        /// <param name="command">The actual data that got changed + some metadata.</param>
+        public override void ObservableChanged(Observable observable, dynamic command)
+        {
+            Console.WriteLine(command.model);
+            Console.WriteLine(command.field);
+            Console.WriteLine(command.action);
+
+            string content = string.Empty;
+
+            if(command.content is IJsonSerializable)
+            {
+                content = command.content.ToJson();
+            }
+            else
+            {
+                content = command.content;
+            }
+
+            Console.WriteLine(content);
         }
     }
 }

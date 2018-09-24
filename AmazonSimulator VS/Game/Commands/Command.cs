@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using AmazonSimulator.Data;
+using AmazonSimulator.Framework.Patterns.Serialization;
+using Newtonsoft.Json;
 using System;
 
 namespace AmazonSimulator.Commands
@@ -12,13 +14,13 @@ namespace AmazonSimulator.Commands
 
     public class Command
     {
-        public dynamic Contents { get; set; }
-        public CommandOpCodes Operation { get; set; }
+        public string CommandName { get; set; } = "Command";
+        public string Contents { get; set; }
 
-        public Command(dynamic contents, CommandOpCodes operation)
+        public Command(string commandName, IJsonSerializable content)
         {
-            Contents = contents;
-            Operation = operation;
+            CommandName = commandName;
+            Contents = content.ToJson();
         }
 
         public string ToJson()
@@ -26,7 +28,6 @@ namespace AmazonSimulator.Commands
             return JsonConvert.SerializeObject(new []
             {
                 Contents,
-                Operation.ToString(),
             });
         }
     }
@@ -35,12 +36,7 @@ namespace AmazonSimulator.Commands
     {
         public static Command FromJson(string json)
         {
-            string[] values = JsonConvert.DeserializeObject<string[]>(json);
-
-            dynamic content = values[0];
-            CommandOpCodes opCode = (CommandOpCodes)Enum.Parse(typeof(CommandOpCodes), values[1]);
-
-            return new Command(content, opCode);
+            return new Command("command", new Entity(ushort.MaxValue));
         }
     }
 }

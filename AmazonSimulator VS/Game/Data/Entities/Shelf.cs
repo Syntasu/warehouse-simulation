@@ -2,7 +2,7 @@
 {
     public class Rack : Entity
     {
-        public Rack(ushort id) : base(id, EntityType.Rack)
+        public Rack(ushort id) : base(id)
         {
         }
     }

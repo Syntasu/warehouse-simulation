@@ -28,11 +28,11 @@ namespace AmazonSimulator.Framework.Patterns
         ///     Notify any observers that this observable has changed.
         /// </summary>
         /// <param name="payload">Any arguments we might need to pass.</param>
-        protected void Notify(Command command)
+        protected void Notify(dynamic command)
         {
             foreach (IObserver observer in observers)
             {
-                observer.ObservableChanged(command);
+                observer.ObservableChanged(this, command);
             }
         }
     }

@@ -1,11 +1,10 @@
-﻿using AmazonSimulator.Commands;
-using AmazonSimulator.Framework.Patterns;
+﻿using AmazonSimulator.Framework.Patterns;
 
 using System.Collections.Generic;
 
 namespace AmazonSimulator.Framework
 {
-    public class Controller : IObserver
+    public abstract class Controller : IObserver
     {
         private List<Observable> models = new List<Observable>();
         private List<Observable> views  = new List<Observable>();
@@ -48,9 +47,12 @@ namespace AmazonSimulator.Framework
             return default(T);
         }
 
-        public virtual void ObservableChanged(Command command)
-        {
-            System.Console.WriteLine($"{command.ToJson()}");
-        }
+        /// <summary>
+        ///     Implemented by the inheriting controller.
+        ///     This abstract method receives all the changes from the model and view.
+        /// </summary>
+        /// <param name="observable">The observable that has changed.</param>
+        /// <param name="command">The data accompanied by the observable.</param>
+        public abstract void ObservableChanged(Observable observable, dynamic command);
     }
 }

@@ -1,7 +1,12 @@
-﻿using System.Dynamic;
+﻿using AmazonSimulator.Framework.Patterns.Serialization;
+using System.Dynamic;
 
 namespace AmazonSimulator.Framework.Patterns
 {
+    /// <summary>
+    ///     Creates an property that can be observed by observers.
+    /// </summary>
+    /// <typeparam name="T">The type of the propertyy.</typeparam>
     public class ObservableProperty<T> : Observable
     {
         public T Value
@@ -22,8 +27,8 @@ namespace AmazonSimulator.Framework.Patterns
                 }
 
                 dynamic payload = new ExpandoObject();
-                payload.Operation = "modified";
-                payload.Content = State;
+                payload.action = "modified";
+                payload.content = State;
 
                 Notify(payload);
             }
