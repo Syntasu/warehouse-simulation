@@ -1,4 +1,5 @@
-﻿using AmazonSimulator.Commands;
+﻿
+using AmazonSimulator.Commands;
 using AmazonSimulator.Framework.Patterns;
 
 namespace AmazonSimulator.Framework

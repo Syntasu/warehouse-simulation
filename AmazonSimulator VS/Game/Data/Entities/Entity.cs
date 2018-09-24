@@ -2,7 +2,7 @@
 
 namespace AmazonSimulator.Data
 {
-    public enum EntityType : byte
+    public enum EntityType
     {
         Entity,
         Robot,

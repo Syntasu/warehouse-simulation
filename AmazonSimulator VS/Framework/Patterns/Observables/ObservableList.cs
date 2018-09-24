@@ -20,6 +20,8 @@ namespace AmazonSimulator.Framework.Patterns
         public void Add(T item)
         {
             State.Add(item);
+
+
             Notify(new Command(item, CommandOpCodes.Created));
         }
 
@@ -51,7 +53,6 @@ namespace AmazonSimulator.Framework.Patterns
         public bool Remove(T item)
         {
             Notify(new Command(item, CommandOpCodes.Deleted));
-
             return State.Remove(item);
         }
 

@@ -1,6 +1,7 @@
 ﻿using AmazonSimulator.Data;
 using AmazonSimulator.Framework;
 using AmazonSimulator.Framework.Patterns;
+
 using System;
 
 namespace AmazonSimulator.Models
@@ -25,7 +26,6 @@ namespace AmazonSimulator.Models
         public void AddEntity<T>(Vector3 position, Vector3 rotation) where T : Entity
         {
             entityCounter++;
-            //Console.WriteLine(entityCounter);
 
             T entity = (T)Activator.CreateInstance(typeof(T), new object[] { entityCounter });
             entity.SetEntityPosition(position);

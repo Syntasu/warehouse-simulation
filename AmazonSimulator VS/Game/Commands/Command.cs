@@ -23,7 +23,7 @@ namespace AmazonSimulator.Commands
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(new string[]
+            return JsonConvert.SerializeObject(new []
             {
                 Contents,
                 Operation.ToString(),
@@ -33,7 +33,7 @@ namespace AmazonSimulator.Commands
 
     public static class CommandFactory
     {
-        public static Command Create(string json)
+        public static Command FromJson(string json)
         {
             string[] values = JsonConvert.DeserializeObject<string[]>(json);
 
