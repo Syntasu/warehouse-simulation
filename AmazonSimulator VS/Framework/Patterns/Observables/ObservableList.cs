@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 
@@ -19,6 +20,30 @@ namespace AmazonSimulator.Framework.Patterns
         ///     Return wether the Observable list is readonly.
         /// </summary>
         public bool IsReadOnly => State.IsReadOnly;
+
+        public T this[T item]
+        {
+            get
+            {
+                Console.WriteLine("Someone used the get!");
+                return State[item];
+            }
+
+            set
+            {
+                Console.WriteLine("Someone used the set!");
+                if (item != State[item])
+                {
+                    //Notify the observer we added a new item.
+                    Notify(new ObservableArgs()
+                    {
+                        Content = item.ToString(),
+                        Action = "modified"
+                    });
+                }
+            }
+        }
+
 
         /// <summary>
         ///     Constructor, make the internal state a new list of type T.

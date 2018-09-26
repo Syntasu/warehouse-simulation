@@ -2,14 +2,6 @@
 
 namespace AmazonSimulator.Data
 {
-    public enum EntityType
-    {
-        Entity,
-        Robot,
-        Truck,
-        Rack
-    }
-
     public class Entity
     {
         public ushort EntityId { get; protected set; } = 0;
