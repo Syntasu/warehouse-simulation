@@ -16,7 +16,7 @@ namespace AmazonSimulator_VS
 {
     public class Startup
     {
-        public static SimulationController simulationController;
+        private SimulationController simulationController;
         private NetworkView networkView = new NetworkView();
 
         public Startup(IConfiguration configuration)
@@ -24,14 +24,15 @@ namespace AmazonSimulator_VS
             simulationController = new SimulationController();
             simulationController.AddModel(new WorldModel());
             simulationController.AddView(networkView);
-            //simulationController.Start();
 
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        ///     This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseDefaultFiles();
@@ -48,15 +49,15 @@ namespace AmazonSimulator_VS
             app.UseWebSockets();
             app.Use(HandleRequests);
 
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            Console.WriteLine("Test!");
         }
 
+        /// <summary>
+        ///     Handle any incoming request of the server.
+        /// </summary>
         private async Task HandleRequests(HttpContext context, Func<Task> next)
         {
             if (context.Request.Path == "/connect_client")
@@ -84,6 +85,10 @@ namespace AmazonSimulator_VS
             }
         }
 
+        /// <summary>
+        ///     Wait a bit for the simulation to start
+        ///     Prevents interfering with the startup process.
+        /// </summary>
         private async void StartSimulation()
         {
             await Task.Delay(1000);
