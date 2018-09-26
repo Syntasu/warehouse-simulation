@@ -1,5 +1,4 @@
-﻿using AmazonSimulator.Framework.Patterns.Serialization;
-using System.Dynamic;
+﻿using System.Dynamic;
 
 namespace AmazonSimulator.Framework.Patterns
 {
@@ -28,7 +27,7 @@ namespace AmazonSimulator.Framework.Patterns
 
                 dynamic payload = new ExpandoObject();
                 payload.action = "modified";
-                payload.content = State;
+                payload.content = State.ToString();
 
                 Notify(payload);
             }

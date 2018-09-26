@@ -2,7 +2,6 @@
 using AmazonSimulator.Data.Entities;
 using AmazonSimulator.Framework;
 using AmazonSimulator.Framework.Patterns;
-using AmazonSimulator.Framework.Patterns.Serialization;
 using AmazonSimulator.Models;
 using System;
 using System.Threading;
@@ -93,17 +92,7 @@ namespace AmazonSimulator.Controllers
             Console.WriteLine(command.field);
             Console.WriteLine(command.action);
 
-            string content = string.Empty;
-
-            if(command.content is IJsonSerializable)
-            {
-                content = command.content.ToJson();
-            }
-            else
-            {
-                content = command.content;
-            }
-
+            string content = command.content.ToString();
             Console.WriteLine(content);
         }
     }

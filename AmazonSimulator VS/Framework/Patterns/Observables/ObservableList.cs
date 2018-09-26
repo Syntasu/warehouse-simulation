@@ -1,6 +1,4 @@
-﻿using AmazonSimulator.Framework.Patterns.Serialization;
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 

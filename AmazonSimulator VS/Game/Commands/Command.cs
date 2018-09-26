@@ -1,7 +1,5 @@
 ﻿using AmazonSimulator.Data;
-using AmazonSimulator.Framework.Patterns.Serialization;
 using Newtonsoft.Json;
-using System;
 
 namespace AmazonSimulator.Commands
 {
@@ -17,10 +15,10 @@ namespace AmazonSimulator.Commands
         public string CommandName { get; set; } = "Command";
         public string Contents { get; set; }
 
-        public Command(string commandName, IJsonSerializable content)
+        public Command(string commandName, dynamic content)
         {
             CommandName = commandName;
-            Contents = content.ToJson();
+            Contents = content.ToString();
         }
 
         public string ToJson()
