@@ -37,7 +37,10 @@ namespace AmazonSimulator.Framework.Patterns
             State.Add(item);
 
             //Notify the observer we added a new item.
-            Notify(CreatePacket(item, "add"));
+            Notify(new ObservableArgs() {
+                Content = item.ToString(),
+                Action = "add"
+            });
         }
 
         /// <summary>
@@ -47,8 +50,12 @@ namespace AmazonSimulator.Framework.Patterns
         {
             //Before we clear out the list, notify to the observer of the removed items.
             foreach (T item in State)
-            { 
-                Notify(CreatePacket(item, "remove"));
+            {
+                Notify(new ObservableArgs()
+                {
+                    Content = item.ToString(),
+                    Action = "remove"
+                });
             }
 
             State.Clear();
@@ -90,7 +97,11 @@ namespace AmazonSimulator.Framework.Patterns
         public bool Remove(T item)
         {
             //Notify observer something was removed from the collection
-            Notify(CreatePacket(item, "remove"));
+            Notify(new ObservableArgs()
+            {
+                Content = item.ToString(),
+                Action = "remove"
+            });
 
             return State.Remove(item);
         }
@@ -101,21 +112,6 @@ namespace AmazonSimulator.Framework.Patterns
         IEnumerator IEnumerable.GetEnumerator()
         {
             return State.GetEnumerator();
-        }
-
-        /// <summary>
-        ///     Create a new packet to notify observers with.
-        /// </summary>
-        /// <param name="item">Item in the collection that got operated on.</param>
-        /// <param name="action">The action that has occured.</param>
-        /// <returns>A dynamic containing the nessacarry</returns>
-        private dynamic CreatePacket(T item, string action)
-        {
-            dynamic packet = new ExpandoObject();
-            packet.content = item;
-            packet.action = action;
-
-            return packet;
         }
     }
 }

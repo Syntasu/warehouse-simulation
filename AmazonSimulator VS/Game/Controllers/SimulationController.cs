@@ -86,14 +86,14 @@ namespace AmazonSimulator.Controllers
         /// </summary>
         /// <param name="observable">The observable that was changed</param>
         /// <param name="command">The actual data that got changed + some metadata.</param>
-        public override void ObservableChanged(Observable observable, dynamic command)
+        public override void ObservableChanged(Observable observable, ObservableArgs args)
         {
-            Console.WriteLine(command.model);
-            Console.WriteLine(command.field);
-            Console.WriteLine(command.action);
-
-            string content = command.content.ToString();
-            Console.WriteLine(content);
+            if(args is ObservableModelArgs)
+            {
+                ObservableModelArgs modelArgs = args as ObservableModelArgs;
+                Console.WriteLine($"\nThe changed model is [{modelArgs.Model.ToUpper()}] and field [{modelArgs.Field.ToUpper()}]" +
+                    $"\n The action performed was [{modelArgs.Action.ToUpper()}] with this data: {modelArgs.Content}\n");
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ namespace AmazonSimulator.Framework.Patterns
         /// <summary>
         ///     A method that gets called when the observable changed.
         /// </summary>
-        /// <param name="payload">The arguments given from the observable.</param>
-        void ObservableChanged(Observable observable, dynamic payload);
+        /// <param name="arguments">The arguments given from the observable.</param>
+        void ObservableChanged(Observable observable, ObservableArgs arguments);
     }
 }

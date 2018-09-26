@@ -48,18 +48,21 @@ namespace AmazonSimulator.Framework
         ///     This method will proxy the request through to the controller (who is observing the model).
         /// </summary>
         /// <param name="payload"></param>
-        public void ObservableChanged(Observable observable, dynamic command)
+        public void ObservableChanged(Observable observable, ObservableArgs args)
         {
             bool success = observables.TryGetValue(observable, out string name);
 
             if(success)
             {
-                //Supply extra bits of data so the controller can identify
-                //  who we are and what exactly changed.
-                command.model = modelName;
-                command.field = name;
-            
-                Notify(command);
+                ObservableModelArgs modelArgs = new ObservableModelArgs
+                {
+                    Model = modelName,
+                    Field = name,
+                    Action = args.Action,
+                    Content = args.Content
+                };
+
+                Notify(modelArgs);
             }
             else
             {

@@ -25,11 +25,10 @@ namespace AmazonSimulator.Framework.Patterns
                     State = value; 
                 }
 
-                dynamic payload = new ExpandoObject();
-                payload.action = "modified";
-                payload.content = State.ToString();
-
-                Notify(payload);
+                Notify(new ObservableArgs() {
+                    Content = State.ToString(),
+                    Action = "modified"
+                });
             }
         }
 

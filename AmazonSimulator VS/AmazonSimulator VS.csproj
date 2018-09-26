@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>AmazonSimulator</AssemblyName>
+    <RootNamespace>AmazonSimulator</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

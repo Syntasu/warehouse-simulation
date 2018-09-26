@@ -53,6 +53,6 @@ namespace AmazonSimulator.Framework
         /// </summary>
         /// <param name="observable">The observable that has changed.</param>
         /// <param name="command">The data accompanied by the observable.</param>
-        public abstract void ObservableChanged(Observable observable, dynamic command);
+        public abstract void ObservableChanged(Observable observable, ObservableArgs args);
     }
 }
