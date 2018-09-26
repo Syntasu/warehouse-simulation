@@ -12,13 +12,13 @@ namespace AmazonSimulator.Data
 
     public class Entity
     {
-        protected ushort Id = 0;
-        protected Vector3 Position = Vector3.Zero;
-        protected Vector3 Rotation = Vector3.Zero;
+        public ushort EntityId { get; protected set; } = 0;
+        public Vector3 Position { get; protected set; } = Vector3.Zero;
+        public Vector3 Rotation { get; protected set; } = Vector3.Zero;
 
-        public Entity(ushort id)
+        public Entity(ushort entityId)
         {
-            Id = id;
+            EntityId = entityId;
         }
 
         public void SetEntityPosition(Vector3 position)
@@ -34,7 +34,7 @@ namespace AmazonSimulator.Data
         public override string ToString()
         {
             return JsonConvert.SerializeObject(new object[]{
-                Id,
+                EntityId,
                 Position,
                 Rotation
             });

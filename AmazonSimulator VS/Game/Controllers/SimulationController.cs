@@ -59,12 +59,25 @@ namespace AmazonSimulator.Controllers
             // TODO: Reset data?
         }
 
+        ushort robotId = 0;
+
         /// <summary>
         ///     Process one frame of the simulation
         /// </summary>
         public void ProcessFrame()
         {
-            if (tickCount == 0) InitializeSimulation();
+            if (tickCount == 0)
+            {
+                InitializeSimulation();
+                return;
+            }
+
+            WorldModel world = GetModel<WorldModel>();
+
+            Robot robot = world.GetEntity<Robot>(robotId);
+
+            Vector3 robotPos = robot.Position;
+            robotPos.Y += 0.1f;
         }
 
         /// <summary>
@@ -74,11 +87,9 @@ namespace AmazonSimulator.Controllers
         {
             WorldModel world = GetModel<WorldModel>();
 
-            world.AddEntity<Robot>(Vector3.Zero, Vector3.Zero);
+            robotId = world.AddEntity<Robot>(Vector3.Zero, Vector3.Zero);
             world.AddEntity<Truck>(Vector3.Zero, Vector3.Zero);
             world.AddEntity<Rack>(Vector3.Zero, Vector3.Zero);
-
-            world.SetWorldName("Hello world!");
         }
 
         /// <summary>
@@ -88,9 +99,12 @@ namespace AmazonSimulator.Controllers
         /// <param name="command">The actual data that got changed + some metadata.</param>
         public override void ObservableChanged(Observable observable, ObservableArgs args)
         {
+            /// We received an update from the model.
             if(args is ObservableModelArgs)
             {
                 ObservableModelArgs modelArgs = args as ObservableModelArgs;
+                Notify(modelArgs);
+
                 Console.WriteLine($"\nThe changed model is [{modelArgs.Model.ToUpper()}] and field [{modelArgs.Field.ToUpper()}]" +
                     $"\n The action performed was [{modelArgs.Action.ToUpper()}] with this data: {modelArgs.Content}\n");
             }

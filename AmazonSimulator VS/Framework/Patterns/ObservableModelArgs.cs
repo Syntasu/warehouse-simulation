@@ -1,4 +1,6 @@
-﻿namespace AmazonSimulator.Framework.Patterns
+﻿using Newtonsoft.Json;
+
+namespace AmazonSimulator.Framework.Patterns
 {
     /// <summary>
     ///     Event arguments when a model has changed data.
@@ -35,6 +37,20 @@
             {
                 data.field = value;
             }
+        }
+
+        /// <summary>
+        ///     Convert to a json string.
+        /// </summary>
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(new string[]
+            {
+                Model,
+                Field,
+                Action,
+                Content
+            });
         }
     }
 }

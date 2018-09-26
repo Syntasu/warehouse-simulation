@@ -1,4 +1,5 @@
 ﻿using AmazonSimulator.Framework;
+using AmazonSimulator.Framework.Patterns;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net.WebSockets;
@@ -10,6 +11,9 @@ namespace AmazonSimulator.Views
 {
     public class NetworkView : View
     {
+        /// <summary>
+        ///     The websocket we obtain via the HandleRequest method.
+        /// </summary>
         private WebSocket socket;
 
         public async Task HandleRequest(HttpContext context, Func<Task> next)
@@ -29,6 +33,27 @@ namespace AmazonSimulator.Views
             else
             {
                 await next();
+            }
+        }
+
+        /// <summary>
+        ///     Intercept any incoming changes from the controller/model.
+        /// </summary>
+        /// <param name="observable">The observable that got changed (presumably a controller)</param>
+        /// <param name="arguments">The arguments for the changing piece of data.</param>
+        public override void ObservableChanged(Observable observable, ObservableArgs arguments)
+        {
+            if (arguments is ObservableModelArgs)
+            {
+                ObservableModelArgs args = arguments as ObservableModelArgs;
+                string content = args.ToString();
+
+                if (!String.IsNullOrEmpty(content))
+                {
+                    Task.Run(async () => {
+                        await Send(content);
+                    });
+                }
             }
         }
 
@@ -52,7 +77,7 @@ namespace AmazonSimulator.Views
             await socket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
         }
 
-        private async void Send(string message)
+        private async Task Send(string message)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(message);
 
@@ -65,6 +90,5 @@ namespace AmazonSimulator.Views
                 Console.WriteLine("Error while sending information to client, probably a Socket disconnect");
             }
         }
-
     }
 }

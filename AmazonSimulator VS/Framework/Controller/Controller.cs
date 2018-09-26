@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AmazonSimulator.Framework
 {
-    public abstract class Controller : IObserver
+    public abstract class Controller : Observable, IObserver
     {
         private List<Observable> models = new List<Observable>();
         private List<Observable> views  = new List<Observable>();
@@ -15,7 +15,11 @@ namespace AmazonSimulator.Framework
         /// <param name="model">Model instance we want to add.</param>
         public void AddModel(Model model)
         {
+            //  Subscribe for any changes that happen in the model.
             model.Subscribe(this);
+
+            //TODO: we probably also want to listen for controller events (i.e update model via view).
+
             models.Add(model);
         }
 
@@ -25,7 +29,13 @@ namespace AmazonSimulator.Framework
         /// <param name="view">The view instance we want to add.</param>
         public void AddView(View view)
         {
+            // Subscribe for any changes happening inside of the view. (view actions).
             view.Subscribe(this);
+
+            //Subscribe for any changes that happens within the controller.
+            // I.e. when the view should be updated.
+            view.AddController(this);
+
             views.Add(view);
         }
 
