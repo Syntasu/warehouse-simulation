@@ -21,29 +21,27 @@ namespace AmazonSimulator.Framework.Patterns
         /// </summary>
         public bool IsReadOnly => State.IsReadOnly;
 
-        public T this[T item]
+        public T this[int index]
         {
             get
             {
                 Console.WriteLine("Someone used the get!");
-                return State[item];
+                return State[index];
             }
 
             set
             {
-                Console.WriteLine("Someone used the set!");
-                if (item != State[item])
+                State[index] = value;
+
+                //Notify the observer we added a new item.
+                //TODO: Add delta compression, currently T does not implement IEquatable.
+                Notify(new ObservableArgs()
                 {
-                    //Notify the observer we added a new item.
-                    Notify(new ObservableArgs()
-                    {
-                        Content = item.ToString(),
-                        Action = "modified"
-                    });
-                }
+                    Content = value.ToString(),
+                    Action = "modified"
+                });
             }
         }
-
 
         /// <summary>
         ///     Constructor, make the internal state a new list of type T.
@@ -129,6 +127,22 @@ namespace AmazonSimulator.Framework.Patterns
             });
 
             return State.Remove(item);
+        }
+
+        public int IndexOf(T item)
+        {
+            int count = 0;
+            foreach (T value in State)
+            {
+                if (item.Equals(value))
+                {
+                    return count;
+                }
+
+                count++;
+            }
+
+            return -1;
         }
 
         /// <summary>

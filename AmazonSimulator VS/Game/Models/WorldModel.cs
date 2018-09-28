@@ -57,6 +57,17 @@ namespace AmazonSimulator.Models
             return (T)Entities.FirstOrDefault(entity => entity.EntityId == entityId);
         }
 
+        /// <summary>
+        /// /   Update an entity in the entities list, this is required
+        ///     so the updates get passed along the model to the controller -> view.
+        /// </summary>
+        /// <typeparam name="T">Type of the entity.</typeparam>
+        /// <param name="entity"></param>
+        public void UpdateEntity(Entity entity)
+        {
+            int index = Entities.IndexOf(entity);
+            Entities[index] = entity;
+        }
 
     }
 }

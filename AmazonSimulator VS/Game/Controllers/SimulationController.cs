@@ -78,6 +78,8 @@ namespace AmazonSimulator.Controllers
 
             Vector3 robotPos = robot.Position;
             robotPos.Y += 0.1f;
+
+            world.UpdateEntity(robot);
         }
 
         /// <summary>
