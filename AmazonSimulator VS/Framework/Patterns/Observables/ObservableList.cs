@@ -129,12 +129,20 @@ namespace AmazonSimulator.Framework.Patterns
             return State.Remove(item);
         }
 
+        /// <summary>
+        ///     Fetch the index of an item. (return first occurence).
+        /// </summary>
+        /// <param name="item">The item we are looking for.</param>
+        /// <returns>The index of the found item, -1 if nothing is found.</returns>
         public int IndexOf(T item)
         {
             int count = 0;
             foreach (T value in State)
             {
-                if (item.Equals(value))
+                //HACK: item.Equals(value) does not work because we can't compare T.
+                //      Knowing that most T types implement their own custom ToString method
+                //      We can abuse this fact to compare 2 T's.
+                if (item.ToString() == value.ToString())
                 {
                     return count;
                 }
