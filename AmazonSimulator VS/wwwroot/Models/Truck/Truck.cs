@@ -1,6 +1,5 @@
 ﻿class Truck extends THREE.Group
 {
-
     constructor() {
         super();
 

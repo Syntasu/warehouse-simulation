@@ -43,9 +43,44 @@
                 plane.position.z = 15;
                 scene.add(plane);
 
+               
+
                 var light = new THREE.AmbientLight(0x404040);
                 light.intensity = 4;
                 scene.add(light);
+
+                //Skybox Sphere
+                scene.add(new THREE.Mesh(new THREE.SphereGeometry(1000, 12, 12), new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/skybox.jpg"), side: THREE.DoubleSide })));
+
+                // Warehouse Docking station
+                var geometry = new THREE.BoxGeometry(6, 2, 3);
+                var material = new THREE.MeshLambertMaterial({ color: 0xFFFF00 });
+                var dock = new THREE.Mesh(geometry, material);
+
+                dock.position.x = 15;
+                dock.position.y = 1;
+                dock.position.z = 6;
+                scene.add(dock);
+
+                var geometry = new THREE.BoxGeometry(6.01, 0.5, 1);
+                var material = new THREE.MeshLambertMaterial({ color: 0x000000 });
+                var robotdoor = new THREE.Mesh(geometry, material);
+
+                robotdoor.position.x = 15;
+                robotdoor.position.y = 0.25;
+                robotdoor.position.z = 6;
+                scene.add(robotdoor);
+
+                var geometry = new THREE.BoxGeometry(2, 1.5, 3);
+                var material = new THREE.MeshLambertMaterial({ color: 0x000000 });
+                var loadingdock = new THREE.Mesh(geometry, material);
+                loadingdock.position.x = 15;
+                loadingdock.position.y = 0.75;
+                loadingdock.position.z = 5.99;
+                scene.add(loadingdock);
+
+
+
             }
 
             function onWindowResize() {
