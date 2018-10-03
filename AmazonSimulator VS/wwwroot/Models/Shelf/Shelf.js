@@ -1,5 +1,4 @@
-﻿class Shelf extends THREE.Group
-{
+﻿class Shelf extends THREE.Group {
     constructor() {
         super();
 

@@ -45,13 +45,13 @@
 
 
 
-                // Lightning 
+                // Lightning
                 var ambientLight = new THREE.AmbientLight(0x404040, 0.5);
                 scene.add(ambientLight);
                 var directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
                 directionalLight.position.set(75, 45, 75);
                 scene.add(directionalLight)
-                
+
 
                 //Skybox Sphere
                 scene.add(new THREE.Mesh(new THREE.SphereGeometry(750, 12, 12), new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/skybox.jpg"), side: THREE.DoubleSide })));
@@ -108,7 +108,7 @@
                 tWall.position.y = 1;
                 tWall.position.z = 29.85;
                 scene.add(tWall);
-                // bottom wall 1
+                // bottom wall Left side
                 var geometry = new THREE.BoxGeometry(2.5, 2, 0.25)
                 var material = new THREE.MeshLambertMaterial({ color: 0xFFFF00 });
                 var bWall1 = new THREE.Mesh(geometry, material);
@@ -116,7 +116,7 @@
                 bWall1.position.y = 0;
                 bWall1.position.z = -22.725;
                 tWall.add(bWall1);
-
+                // bottom wall Right Side
                 var bWall2 = new THREE.Mesh(geometry, material);
                 bWall2.position.x = -8.5;
                 bWall2.position.y = 0;
@@ -145,25 +145,26 @@
 
                 if (command.command == "update") {
                     if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
-                        if (command.parameters.Type == "robot") {
-                            var geometry = new THREE.BoxGeometry(0.9, 0.31, 0.9);
-                            var cubeMaterials = [
-                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_side.png"), side: THREE.DoubleSide }), //LEFT
-                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_side.png"), side: THREE.DoubleSide }), //RIGHT
-                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_top.png"), side: THREE.DoubleSide }), //TOP
-                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_bottom.png"), side: THREE.DoubleSide }), //BOTTOM
-                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_front.png"), side: THREE.DoubleSide }), //FRONT
-                                new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/robot_front.png"), side: THREE.DoubleSide }), //BACK
-                            ];
-                            var material = new THREE.MeshFaceMaterial(cubeMaterials);
-                            var robot = new THREE.Mesh(geometry, material);
-                            robot.position.y = 0.15;
+                        // Robots
+                        if (command.parameters.type == "robot") {
+                            var robot = new Robot();
 
-                            var group = new THREE.Group();
-                            group.add(robot);
+                            scene.add(robot);
+                            worldObjects[command.parameters.guid] = robot;
+                        }
+                        // Truck
+                        if (command.parameters.type == "Truck") {
+                            var Truck = new Truck();
 
-                            scene.add(group);
-                            worldObjects[command.parameters.guid] = group;
+                            scene.add(Truck);
+                            worldObjects[command.parameters.guid] = Truck;
+                        }
+                        // shellfs
+                        if (command.parameters.type == "Shelf") {
+                            var Shelf = new Shelf();
+
+                            scene.add(Shelf);
+                            worldObjects[command.parameters.guid] = Shelf;
                         }
                     }
 
@@ -176,6 +177,8 @@
                     object.rotation.x = command.parameters.Rotation.X;
                     object.rotation.y = command.parameters.Rotation.Y;
                     object.rotation.z = command.parameters.Rotation.Z;
+
+                    object.children[0].userData.status = command.parameters.status;
                 }
             }
 
@@ -185,5 +188,9 @@
     </script>
     <script src="three.min.js"></script>
     <script src="OrbitControls.js"></script>
+    <script src="three.min.js"></script>
+    <script src="models/Truck/Truck.js"></script>
+    <script src="Models/Robot/Robot.js"></script>
+    <script src="Models/Shelf/Shelf.js"></script>
 </body>
 </html>

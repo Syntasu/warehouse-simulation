@@ -1,5 +1,4 @@
-﻿class Robot extends THREE.Group
-{
+﻿class Robot extends THREE.Group {
     constructor() {
         super();
 
