@@ -22,20 +22,33 @@ namespace AmazonSimulator.Views
         /// <param name="arguments">The arguments for the changing piece of data.</param>
         public override void ObservableChanged(Observable observable, ObservableArgs arguments)
         {
-            if (arguments is ObservableModelArgs)
-            {
-                ObservableModelArgs args = arguments as ObservableModelArgs;
-                string content = args.ToString();
+            //Get the content from the arguments.
+            dynamic content = arguments.Content;
 
+            //If we have a string...
+            if(content is string)
+            {
+                //Don't bother sending empty shit.
                 if (!string.IsNullOrEmpty(content))
                 {
+                    //Send it!
+                    //NOTE: This is wrapped in Task.Run, so we don't
+                    //      have to make literally _everything_ async...
                     Task.Run(async () => {
                         await Send(content);
                     });
                 }
             }
+            else
+            {
+                Console.WriteLine("Trying to send a non-string over net, that's bad!");
+            }
         }
 
+        /// <summary>
+        ///     Receive new data from the client(s).
+        /// </summary>
+        /// <returns>A void task, not of use.</returns>
         public async Task Receive()
         {
             byte[] buffer = new byte[4096];
@@ -55,6 +68,11 @@ namespace AmazonSimulator.Views
             await Socket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
         }
 
+        /// <summary>
+        ///     Send a new message to the client.
+        /// </summary>
+        /// <param name="message">The payload we want to send.</param>
+        /// <returns>A void task, not of use.</returns>
         private async Task Send(string message)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(message);

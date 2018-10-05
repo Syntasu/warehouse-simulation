@@ -1,6 +1,8 @@
 ﻿using AmazonSimulator.Data;
 using AmazonSimulator.Framework;
 using AmazonSimulator.Framework.Patterns;
+using AmazonSimulator.Game.Data;
+
 using System;
 using System.Linq;
 

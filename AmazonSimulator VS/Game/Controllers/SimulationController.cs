@@ -1,9 +1,9 @@
 ﻿using AmazonSimulator.Commands;
 using AmazonSimulator.Data;
-using AmazonSimulator.Data.Entities;
 using AmazonSimulator.Framework;
 using AmazonSimulator.Framework.Patterns;
 using AmazonSimulator.Game.Commands;
+using AmazonSimulator.Game.Data;
 using AmazonSimulator.Models;
 using System;
 using System.Threading;
@@ -103,22 +103,27 @@ namespace AmazonSimulator.Controllers
         /// <param name="command">The actual data that got changed + some metadata.</param>
         public override void ObservableChanged(Observable observable, ObservableArgs args)
         {
-            /// We received an update from the model.
+            //We received an update from the model.
             if(args is ObservableModelArgs)
             {
+                //Convert ModelArgs to an actual command.
                 ObservableModelArgs modelArgs = args as ObservableModelArgs;
                 Command networkCommand = CommandFactory.GetCommandFromModel(modelArgs);
 
+                //To let the view know we have a new command, we need to notify the view.
+                // The command we just made, we convert it to a string we want to send of the network.
+                // And the string we get we pass as arguments.
                 ObservableArgs commandArgs = new ObservableArgs
                 {
                     Content = networkCommand.ToNet()
                 };
 
+                //Let the view know we have changed!
                 Notify(commandArgs);
-
-                Console.WriteLine($"\nThe changed model is [{modelArgs.Model.ToUpper()}] and field [{modelArgs.Field.ToUpper()}]" +
-                    $"\n The action performed was [{modelArgs.Action.ToUpper()}] with this data: {modelArgs.Content}\n");
             }
+
+            //We received an update from the view.
+            //if(args is ObservableViewArgs)
         }
     }
 }

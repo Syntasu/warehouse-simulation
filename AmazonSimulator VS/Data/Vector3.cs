@@ -27,5 +27,12 @@
             Y = y;
             Z = z;
         }
+
+        public void ToStringList(out string sx, out string sy, out string sz)
+        {
+            sx = X.ToString();
+            sy = Y.ToString();
+            sz = Z.ToString();
+        }
     }
 }

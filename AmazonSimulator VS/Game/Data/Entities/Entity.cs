@@ -1,11 +1,9 @@
-﻿using AmazonSimulator.Game.Data;
+﻿using AmazonSimulator.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace AmazonSimulator.Data
+namespace AmazonSimulator.Game.Data
 {
-
-
     public class Entity
     {
         public ushort Id { get; protected set; } = 0;
@@ -33,12 +31,12 @@ namespace AmazonSimulator.Data
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(new object[]{
-                Id,
-                Type,
-                Position,
-                Rotation
-            });
+            return JsonConvert.SerializeObject(this);
+        }
+
+        public static Entity FromJson(string json)
+        {
+            return JsonConvert.DeserializeObject<Entity>(json);
         }
     }
 }

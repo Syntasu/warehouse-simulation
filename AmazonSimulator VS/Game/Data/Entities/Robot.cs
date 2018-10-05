@@ -1,6 +1,4 @@
-using AmazonSimulator.Game.Data;
-
-namespace AmazonSimulator.Data
+namespace AmazonSimulator.Game.Data
 {
     public class Robot : Entity
     {
