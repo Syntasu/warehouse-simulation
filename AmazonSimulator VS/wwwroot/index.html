@@ -141,7 +141,6 @@
             exampleSocket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client");
             exampleSocket.onmessage = function (event)
             {
-                console.log("yay we received a message!");
                 var command = parseCommand(event.data);
                 console.log(event.data);
 

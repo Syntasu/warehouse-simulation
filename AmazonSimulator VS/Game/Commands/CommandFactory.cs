@@ -7,7 +7,7 @@ namespace AmazonSimulator.Game.Commands
     public static class CommandFactory
     {
         //TODO: A less weird way of converting ModelArgs -> NetworkCommand...
-        public static Command GetCommandFromModel(ObservableModelArgs args)
+        public static Command GetNetCommandFromModel(ObservableModelArgs args)
         {
             //Handle all world commands
             if(args.Model == "world")

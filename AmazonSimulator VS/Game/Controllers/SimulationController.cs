@@ -106,9 +106,10 @@ namespace AmazonSimulator.Controllers
             //We received an update from the model.
             if(args is ObservableModelArgs)
             {
-                //Convert ModelArgs to an actual command.
+                //Convert ModelArgs to an actual command, using the command factory,
+                //  The CommandFactory determines which command we want to send.s
                 ObservableModelArgs modelArgs = args as ObservableModelArgs;
-                Command networkCommand = CommandFactory.GetCommandFromModel(modelArgs);
+                Command networkCommand = CommandFactory.GetNetCommandFromModel(modelArgs);
 
                 //To let the view know we have a new command, we need to notify the view.
                 // The command we just made, we convert it to a string we want to send of the network.

@@ -17,6 +17,7 @@ namespace AmazonSimulator.Game.Data
         public Entity(ushort entityId, EntityType type)
         {
             Id = entityId;
+            Type = type;
         }
 
         public void SetEntityPosition(Vector3 position)
