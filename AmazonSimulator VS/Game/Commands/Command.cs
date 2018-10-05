@@ -1,40 +1,14 @@
-﻿using AmazonSimulator.Data;
-using Newtonsoft.Json;
-
-namespace AmazonSimulator.Commands
+﻿namespace AmazonSimulator.Commands
 {
-    public enum CommandOpCodes : byte
+    public abstract class Command
     {
-        Created,
-        Modified,
-        Deleted,
-    }
+        public string CommandName { get; protected set; } = "invalid_command";
 
-    public class Command
-    {
-        public string CommandName { get; set; } = "Command";
-        public string Contents { get; set; }
-
-        public Command(string commandName, dynamic content)
+        protected Command(string commandName)
         {
-            CommandName = commandName;
-            Contents = content.ToString();
+            CommandName = commandName; 
         }
 
-        public string ToJson()
-        {
-            return JsonConvert.SerializeObject(new []
-            {
-                Contents,
-            });
-        }
-    }
-
-    public static class CommandFactory
-    {
-        public static Command FromJson(string json)
-        {
-            return new Command("command", new Entity(ushort.MaxValue));
-        }
+        public abstract string ToNet();
     }
 }

@@ -1,7 +1,9 @@
-﻿using AmazonSimulator.Data;
+﻿using AmazonSimulator.Commands;
+using AmazonSimulator.Data;
 using AmazonSimulator.Data.Entities;
 using AmazonSimulator.Framework;
 using AmazonSimulator.Framework.Patterns;
+using AmazonSimulator.Game.Commands;
 using AmazonSimulator.Models;
 using System;
 using System.Threading;
@@ -90,8 +92,8 @@ namespace AmazonSimulator.Controllers
             WorldModel world = GetModel<WorldModel>();
 
             robotId = world.AddEntity<Robot>(Vector3.Zero, Vector3.Zero);
-            world.AddEntity<Truck>(Vector3.Zero, Vector3.Zero);
-            world.AddEntity<Rack>(Vector3.Zero, Vector3.Zero);
+            ushort truckId = world.AddEntity<Truck>(Vector3.Zero, Vector3.Zero);
+            ushort rackId = world.AddEntity<Rack>(Vector3.Zero, Vector3.Zero);
         }
 
         /// <summary>
@@ -105,7 +107,14 @@ namespace AmazonSimulator.Controllers
             if(args is ObservableModelArgs)
             {
                 ObservableModelArgs modelArgs = args as ObservableModelArgs;
-                Notify(modelArgs);
+                Command networkCommand = CommandFactory.GetCommandFromModel(modelArgs);
+
+                ObservableArgs commandArgs = new ObservableArgs
+                {
+                    Content = networkCommand.ToNet()
+                };
+
+                Notify(commandArgs);
 
                 Console.WriteLine($"\nThe changed model is [{modelArgs.Model.ToUpper()}] and field [{modelArgs.Field.ToUpper()}]" +
                     $"\n The action performed was [{modelArgs.Action.ToUpper()}] with this data: {modelArgs.Content}\n");

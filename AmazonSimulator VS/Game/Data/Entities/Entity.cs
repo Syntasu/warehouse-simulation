@@ -1,16 +1,24 @@
-﻿using Newtonsoft.Json;
+﻿using AmazonSimulator.Game.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace AmazonSimulator.Data
 {
+
+
     public class Entity
     {
-        public ushort EntityId { get; protected set; } = 0;
+        public ushort Id { get; protected set; } = 0;
+
+        [JsonConverter(typeof(StringEnumConverter))] //NOTE: Use default StringEnumConverter to make serializaion possible.
+        public EntityType Type { get; protected set; } = EntityType.Entity;
+
         public Vector3 Position { get; protected set; } = Vector3.Zero;
         public Vector3 Rotation { get; protected set; } = Vector3.Zero;
 
-        public Entity(ushort entityId)
+        public Entity(ushort entityId, EntityType type)
         {
-            EntityId = entityId;
+            Id = entityId;
         }
 
         public void SetEntityPosition(Vector3 position)
@@ -26,7 +34,8 @@ namespace AmazonSimulator.Data
         public override string ToString()
         {
             return JsonConvert.SerializeObject(new object[]{
-                EntityId,
+                Id,
+                Type,
                 Position,
                 Rotation
             });

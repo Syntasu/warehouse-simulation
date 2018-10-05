@@ -33,7 +33,7 @@ namespace AmazonSimulator.Framework
         }
 
         /// <summary>
-        ///     Tell the model to observe the given ObservableList.
+        ///     Tell the model to observe the given Observable.
         ///     This piece of data is now part of the model.
         /// </summary>
         /// <param name="observable">An observable we want to observe.</param>

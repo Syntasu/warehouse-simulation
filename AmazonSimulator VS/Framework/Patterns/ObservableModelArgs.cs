@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using AmazonSimulator.Commands;
+using Newtonsoft.Json;
 
 namespace AmazonSimulator.Framework.Patterns
 {

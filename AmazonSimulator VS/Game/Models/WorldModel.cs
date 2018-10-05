@@ -54,7 +54,7 @@ namespace AmazonSimulator.Models
         /// <returns>A entity or default(T).</returns>
         public T GetEntity<T>(ushort entityId) where T : Entity
         {
-            return (T)Entities.FirstOrDefault(entity => entity.EntityId == entityId);
+            return (T)Entities.FirstOrDefault(entity => entity.Id == entityId);
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
 
 namespace AmazonSimulator.Framework.Patterns
 {
@@ -21,11 +20,15 @@ namespace AmazonSimulator.Framework.Patterns
         /// </summary>
         public bool IsReadOnly => State.IsReadOnly;
 
+        /// <summary>
+        ///     Indexer for ObservableList by int/index.
+        /// </summary>
+        /// <param name="index">The index we want to fetch.</param>
+        /// <returns>Returns T as the given index.</returns>
         public T this[int index]
         {
             get
             {
-                Console.WriteLine("Someone used the get!");
                 return State[index];
             }
 
