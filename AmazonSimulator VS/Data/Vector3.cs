@@ -58,5 +58,10 @@ namespace AmazonSimulator.Data
             sy = Y.ToString();
             sz = Z.ToString();
         }
+
+        public static double Magnitude(Vector3 a, Vector3 b)
+        {
+            return Math.Sqrt(Math.Pow((a.X - b.X), 2) + Math.Pow((a.Y - b.Y), 2) + Math.Pow((a.Z - b.Z), 2));
+        }
     }
 }

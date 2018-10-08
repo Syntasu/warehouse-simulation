@@ -2,6 +2,7 @@
 using AmazonSimulator.Game.Data;
 using AmazonSimulator.Models;
 using System;
+using System.Collections.Generic;
 
 namespace AmazonSimulator.Game.Controllers
 {
@@ -25,12 +26,14 @@ namespace AmazonSimulator.Game.Controllers
         /// <summary>
         ///     How many trucks do we need to spawn? (1 means 1 per minute.)
         /// </summary>
-        private int truckRate = 60;
+        private int truckRate = 3;
 
         /// <summary>
         ///     When the last truck was spawned.
         /// </summary>
         private double lastTruckSpawn = 0;
+
+        private List<ushort> trucks = new List<ushort>();
 
         /// <summary>
         ///     Returns the elapsed time since the game was create
@@ -78,10 +81,28 @@ namespace AmazonSimulator.Game.Controllers
             double truckSpawnInterval = (1000 * 60) / truckRate;
             double truckSpawnDelta = gameTimeInMs - lastTruckSpawn;
 
+            //Check if we can spawn a new truck.
             if(truckSpawnDelta >= truckSpawnInterval)
             {
-                world.AddEntity<Truck>(data.TruckSpawnpoint, new Vector3(0, 90, 0));
+                //Make and get the truck (id).
+                ushort truckId = world.AddEntity<Truck>(data.TruckSpawnpoint, data.TruckSpawnpointRotation);
+
+                //Tell the truck to drive to the loading bay.
+                Truck truck = world.GetEntity<Truck>(truckId);
+                truck.TaskDriveTo(data.Loadingbay, 0.33f);
+
+                //Store and reset last spawned truck.
+                trucks.Add(truckId);
                 lastTruckSpawn = gameTimeInMs;
+            }
+
+            //Update all the trucks.
+            foreach (ushort truckId in trucks)
+            {
+                Truck truck = world.GetEntity<Truck>(truckId);
+                truck.Tick();
+
+                world.UpdateEntity(truck);
             }
         }
     }

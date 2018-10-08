@@ -58,5 +58,7 @@ namespace AmazonSimulator.Game.Data
 
             return new Entity(id, type, position, rotation);
         }
+
+
     }
 }

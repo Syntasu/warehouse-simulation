@@ -134,6 +134,7 @@
 
             exampleSocket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client");
             exampleSocket.onmessage = function (event) {
+                console.log("RECV");
                 var recv = JSON.parse(event.data);
 
                 // Are we dealing with a entity command?

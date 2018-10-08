@@ -24,7 +24,7 @@ namespace AmazonSimulator.Controllers
         /// <summary>
         ///     How many ticks we should run at.
         /// </summary>
-        private int tickRate = 20;
+        private int tickRate = 30;
 
         /// <summary>
         ///     The thread we run the game logic on.
