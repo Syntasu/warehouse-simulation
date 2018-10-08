@@ -52,6 +52,16 @@ namespace AmazonSimulator.Data
             return $"{X.ToString()}, {Y.ToString()}, {Z.ToString()}";
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is Vector3 v)
+            {
+                return v.X == X && v.Y == Y && v.Z == Z;
+            }
+
+            return base.Equals(obj);
+        }
+
         public void ToStringList(out string sx, out string sy, out string sz)
         {
             sx = X.ToString();

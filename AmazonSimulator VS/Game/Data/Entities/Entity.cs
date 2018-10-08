@@ -44,6 +44,21 @@ namespace AmazonSimulator.Game.Data
             });
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is Entity e)
+            {
+                return Id == e.Id &&
+                       Type == e.Type &&
+                       Position.Equals(e.Position) &&
+                       Rotation.Equals(e.Rotation);
+            }
+            else
+            {
+                return base.Equals(obj);
+            }
+        }
+
         public static Entity FromJson(string json)
         {
             string[] deserialized = JsonConvert.DeserializeObject<string[]>(json);

@@ -68,6 +68,7 @@ namespace AmazonSimulator.Models
         public void UpdateEntity(Entity entity)
         {
             int index = Entities.IndexOf(entity);
+            Entity entityFromCollection = Entities[index];
             Entities[index] = entity;
         }
 
