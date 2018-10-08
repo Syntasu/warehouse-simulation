@@ -139,15 +139,17 @@
                 // Are we dealing with a entity command?
                 if (recv.command.includes("entity")) {
                     var id = recv.id;
-                    var type = recv.type.toLowerCase();
                     var entity = null;
 
                     switch (recv.command) {
                         case "create_entity":
-                            HandleEntityCreate(id, type, recv.px, recv.py, recv.z, recv.rx, recv.ry, recv.rz);
+                            var type = recv.type.toLowerCase();
+                            HandleEntityCreate(id, type, recv.px, recv.py, recv.pz, recv.rx, recv.ry, recv.rz);
+                            break;
+                        case "update_entity":
+                            HandleEntityUpdate(id, recv.px, recv.py, recv.pz, recv.rx, recv.ry, recv.rz);
                             break;
                     }
-
                 }
             }
 
@@ -184,6 +186,24 @@
                 }
                 else {
                     console.log("Could not create entity!");
+                }
+            }
+
+            // Handle any incoming entity_update packets.
+            function HandleEntityUpdate(id, px, py, pz, rx, ry, rz)
+            {
+                var entity = entities[id];
+
+                if (entity != undefined) {
+                    entity.position.x = px || 0;
+                    entity.position.y = py || 0;
+                    entity.position.z = pz || 0;
+                    entity.rotation.x = rx || 0;
+                    entity.rotation.y = ry || 0;
+                    entity.rotation.z = rz || 0;
+                }
+                else {
+                    console.log("Could not find entity with id " + id);
                 }
             }
 

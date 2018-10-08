@@ -45,17 +45,25 @@ namespace AmazonSimulator.Game.Controllers
             ProcessIntialization();
         }
 
+        private ushort mrroboto = 0;
         private void ProcessIntialization()
         {
             for (int i = 0; i < robotCount; i++)
             {
-                world.AddEntity<Robot>(new Vector3(1, 0, 0), Vector3.Zero);
+                mrroboto = world.AddEntity<Robot>(new Vector3(1, 0, 0), Vector3.Zero);
             }
         }
 
         public void ProcessTick()
         {
+            Robot robot = world.GetEntity<Robot>(mrroboto);
 
+            Vector3 position = robot.Position;
+            position.X += 0.1f;
+            position.Z += 0.1f;
+
+            robot.SetEntityPosition(position);
+            world.UpdateEntity(robot);
         }
 
     }
