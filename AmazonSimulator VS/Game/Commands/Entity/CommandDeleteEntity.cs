@@ -1,5 +1,6 @@
 ﻿using AmazonSimulator.Commands;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace AmazonSimulator.Game.Commands
 {
@@ -14,10 +15,13 @@ namespace AmazonSimulator.Game.Commands
 
         public override string ToNet()
         {
-            return JsonConvert.SerializeObject(new string[]{
-                CommandName,
-                Id.ToString()
-            });
+            IDictionary<string, string> command = new Dictionary<string, string>()
+            {
+                { "command", CommandName },
+                { "id", Id.ToString() },
+            };
+
+            return JsonConvert.SerializeObject(command);
         }
     }
 }

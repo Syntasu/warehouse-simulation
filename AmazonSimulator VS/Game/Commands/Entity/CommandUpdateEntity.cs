@@ -2,6 +2,7 @@
 using AmazonSimulator.Data;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace AmazonSimulator.Game.Commands
 {
@@ -23,12 +24,19 @@ namespace AmazonSimulator.Game.Commands
             Position.ToStringList(out string px, out string py, out string pz);
             Rotation.ToStringList(out string rx, out string ry, out string rz);
 
-            return JsonConvert.SerializeObject(new string[] {
-                CommandName,
-                Id.ToString(),
-                px, py, pz,
-                rx, ry, rz
-            });
+            IDictionary<string, string> command = new Dictionary<string, string>()
+            {
+                { "command", CommandName },
+                { "id", Id.ToString() },
+                { "px", px },
+                { "py", py },
+                { "pz", pz },
+                { "rx", rx },
+                { "ry", ry },
+                { "rz", rz },
+            };
+
+            return JsonConvert.SerializeObject(command);
         }
     }
 }

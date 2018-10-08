@@ -3,6 +3,7 @@ using AmazonSimulator.Data;
 using AmazonSimulator.Framework;
 using AmazonSimulator.Framework.Patterns;
 using AmazonSimulator.Game.Commands;
+using AmazonSimulator.Game.Controllers;
 using AmazonSimulator.Game.Data;
 using AmazonSimulator.Models;
 using System;
@@ -12,9 +13,31 @@ namespace AmazonSimulator.Controllers
 {
     public class SimulationController : Controller
     {
+        /// <summary>
+        ///     Wether the controller is or should still be running.
+        /// </summary>
         private bool isRunning = false;
+
+        /// <summary>
+        ///     Counts how many ticks there have been.
+        /// </summary>
         private ulong tickCount = 0;
+        
+        /// <summary>
+        ///     How many ticks we should run at.
+        /// </summary>
+        private int tickRate = 10;
+
+        /// <summary>
+        ///     The thread we run the game logic on.
+        /// </summary>
         private Thread simulationThread;
+
+        /// <summary>
+        ///     SimulationLogic hold all the logic related to the game.
+        /// </summary>
+        private SimulationLogic game;
+
 
         /// <summary>
         ///     Start the simulation.
@@ -31,7 +54,9 @@ namespace AmazonSimulator.Controllers
                     {
                         ProcessFrame();
                         tickCount++;
-                        Thread.Sleep(1000/3);
+
+                        int sleepTime = (int)Math.Round(1000.0 / tickRate);
+                        Thread.Sleep(sleepTime);
                     }
                 });
 
@@ -68,32 +93,17 @@ namespace AmazonSimulator.Controllers
         /// </summary>
         public void ProcessFrame()
         {
-            if (tickCount == 0)
+            WorldModel world = GetModel<WorldModel>();
+
+            //  Initialize the game logic.
+            if (game == null)
             {
-                InitializeSimulation();
-                return;
+                game = new SimulationLogic(world, 2, 1);
             }
-
-            WorldModel world = GetModel<WorldModel>();
-
-            Robot robot = world.GetEntity<Robot>(robotId);
-
-            Vector3 robotPos = robot.Position;
-            robotPos.Y += 0.1f;
-
-            world.UpdateEntity(robot);
-        }
-
-        /// <summary>
-        ///     Start the simulation.
-        /// </summary>
-        private void InitializeSimulation()
-        {
-            WorldModel world = GetModel<WorldModel>();
-
-            robotId = world.AddEntity<Robot>(Vector3.Zero, Vector3.Zero);
-            ushort truckId = world.AddEntity<Truck>(Vector3.Zero, Vector3.Zero);
-            ushort rackId = world.AddEntity<Rack>(Vector3.Zero, Vector3.Zero);
+            else
+            {
+                game.ProcessTick();
+            }
         }
 
         /// <summary>

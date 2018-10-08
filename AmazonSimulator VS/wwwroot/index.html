@@ -7,19 +7,18 @@
 <body style="margin:0px;padding:0px;overflow:hidden;">
 
     <script>
-        function parseCommand(input = "") {
-            return JSON.parse(input);
-        }
 
         var exampleSocket;
 
-        window.onload = function () {
+        window.onload = function ()
+        {
             var camera, scene, renderer;
             var cameraControls;
 
             var worldObjects = {};
 
-            function init() {
+            function init()
+            {
                 camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
                 cameraControls = new THREE.OrbitControls(camera);
                 camera.position.z = 15;
@@ -122,17 +121,17 @@
                 bWall2.position.y = 0;
                 bWall2.position.z = -22.725;
                 tWall.add(bWall2);
-
-
             }
 
-            function onWindowResize() {
+            function onWindowResize()
+            {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
 
-            function animate() {
+            function animate()
+            {
                 requestAnimationFrame(animate);
                 cameraControls.update();
                 renderer.render(scene, camera);
@@ -141,46 +140,82 @@
             exampleSocket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client");
             exampleSocket.onmessage = function (event)
             {
-                var command = parseCommand(event.data);
-                console.log(event.data);
+                var recv = JSON.parse(event.data);
 
-                if (command.command == "update") {
-                    if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
-                        // Robots
-                        if (command.parameters.type == "robot") {
-                            var robot = new Robot();
+                // Are we dealing with a entity command?
+                if (recv.includes("entity"))
+                {
+                    var id = recv.id;
+                    var type = recv.type.toLowerCase();
+                    var entity = null;
 
-                            scene.add(robot);
-                            worldObjects[command.parameters.guid] = robot;
+                    if (recv.command == "create_entity")
+                    {
+                        if (type == "robot") {
+                            entity = new Robot();
                         }
-                        // Truck
-                        if (command.parameters.type == "Truck") {
-                            var Truck = new Truck();
-
-                            scene.add(Truck);
-                            worldObjects[command.parameters.guid] = Truck;
+                        else if (type == "truck") {
+                            entity = new Truck();
                         }
-                        // shellfs
-                        if (command.parameters.type == "Shelf") {
-                            var Shelf = new Shelf();
-
-                            scene.add(Shelf);
-                            worldObjects[command.parameters.guid] = Shelf;
+                        else if (type == "rack") {
+                            entity = new Shelf();
                         }
+                        else {
+                            console.log(type + " is not a valid entity type.");
+                            return;
+                        }
+
+                        //Set entitu position.
+                        entity.position.x = recv.px;
+                        entity.position.y = recv.py;
+                        entity.position.z = recv.pz;
+
+                        //Set entity rotation/
+                        entity.rotation.x = recv.rx;
+                        entity.rotation.y = recv.ry;
+                        entity.rotation.z = recv.rz;
+
+                        scene.add(entity);
                     }
-
-                    var object = worldObjects[command.parameters.guid];
-
-                    object.position.x = command.parameters.Position.X;
-                    object.position.y = command.parameters.Position.Y;
-                    object.position.z = command.parameters.Position.Z;
-
-                    object.rotation.x = command.parameters.Rotation.X;
-                    object.rotation.y = command.parameters.Rotation.Y;
-                    object.rotation.z = command.parameters.Rotation.Z;
-
-                    object.children[0].userData.status = command.parameters.status;
                 }
+
+                //if (command.command == "update") {
+                //    if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
+                //        // Robots
+                //        if (command.parameters.type == "robot") {
+                //            var robot = new Robot();
+
+                //            scene.add(robot);
+                //            worldObjects[command.parameters.guid] = robot;
+                //        }
+                //        // Truck
+                //        if (command.parameters.type == "Truck") {
+                //            var Truck = new Truck();
+
+                //            scene.add(Truck);
+                //            worldObjects[command.parameters.guid] = Truck;
+                //        }
+                //        // shellfs
+                //        if (command.parameters.type == "Shelf") {
+                //            var Shelf = new Shelf();
+
+                //            scene.add(Shelf);
+                //            worldObjects[command.parameters.guid] = Shelf;
+                //        }
+                //    }
+
+                //    var object = worldObjects[command.parameters.guid];
+
+                //    object.position.x = command.parameters.Position.X;
+                //    object.position.y = command.parameters.Position.Y;
+                //    object.position.z = command.parameters.Position.Z;
+
+                //    object.rotation.x = command.parameters.Rotation.X;
+                //    object.rotation.y = command.parameters.Rotation.Y;
+                //    object.rotation.z = command.parameters.Rotation.Z;
+
+                //    object.children[0].userData.status = command.parameters.status;
+                //}
             }
 
             init();
