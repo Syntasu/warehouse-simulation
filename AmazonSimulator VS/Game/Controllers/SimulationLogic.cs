@@ -13,6 +13,11 @@ namespace AmazonSimulator.Game.Controllers
         private WorldModel world;
 
         /// <summary>
+        ///     Contains static data about the simulation.
+        /// </summary>
+        private SimulationData data = new SimulationData();
+
+        /// <summary>
         ///     How many robots would we need?
         /// </summary>
         private int robotCount = 1;
@@ -20,7 +25,12 @@ namespace AmazonSimulator.Game.Controllers
         /// <summary>
         ///     How many trucks do we need to spawn? (1 means 1 per minute.)
         /// </summary>
-        private int truckRate = 1;
+        private int truckRate = 60;
+
+        /// <summary>
+        ///     When the last truck was spawned.
+        /// </summary>
+        private double lastTruckSpawn = 0;
 
         /// <summary>
         ///     Returns the elapsed time since the game was create
@@ -56,15 +66,23 @@ namespace AmazonSimulator.Game.Controllers
 
         public void ProcessTick()
         {
-            Robot robot = world.GetEntity<Robot>(mrroboto);
-
-            Vector3 position = robot.Position;
-            position.X += 0.1f;
-            position.Z += 0.1f;
-
-            robot.SetEntityPosition(position);
-            world.UpdateEntity(robot);
+            ProcessTrucks();
         }
 
+        /// <summary>
+        ///     Function to spawn the trucks.
+        /// </summary>
+        private void ProcessTrucks()
+        {
+            // 1000ms -> 1 second * 60 == 1 minute.
+            double truckSpawnInterval = (1000 * 60) / truckRate;
+            double truckSpawnDelta = gameTimeInMs - lastTruckSpawn;
+
+            if(truckSpawnDelta >= truckSpawnInterval)
+            {
+                world.AddEntity<Truck>(data.TruckSpawnpoint, new Vector3(0, 90, 0));
+                lastTruckSpawn = gameTimeInMs;
+            }
+        }
     }
 }

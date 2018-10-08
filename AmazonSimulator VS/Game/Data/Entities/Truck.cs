@@ -2,16 +2,9 @@
 {
     public class Truck : Entity
     {
-        public Truck(ushort id) : base(id, EntityType.Truck)
-        {
-        }
+        public Truck(ushort id) : base(id, EntityType.Truck) { }
 
-        public void TaskUnload()
-        {
-
-        }
-
-        public void TaskLeave()
+        public void GotoLoadingbay()
         {
 
         }

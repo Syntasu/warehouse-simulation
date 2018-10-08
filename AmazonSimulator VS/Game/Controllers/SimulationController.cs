@@ -1,10 +1,8 @@
 ﻿using AmazonSimulator.Commands;
-using AmazonSimulator.Data;
 using AmazonSimulator.Framework;
 using AmazonSimulator.Framework.Patterns;
 using AmazonSimulator.Game.Commands;
 using AmazonSimulator.Game.Controllers;
-using AmazonSimulator.Game.Data;
 using AmazonSimulator.Models;
 using System;
 using System.Threading;
@@ -26,7 +24,7 @@ namespace AmazonSimulator.Controllers
         /// <summary>
         ///     How many ticks we should run at.
         /// </summary>
-        private int tickRate = 10;
+        private int tickRate = 20;
 
         /// <summary>
         ///     The thread we run the game logic on.
@@ -79,14 +77,12 @@ namespace AmazonSimulator.Controllers
         }
 
         /// <summary>
-        ///     Reset the simulation.
+        ///     Reset the simulation, todo..
         /// </summary>
         public void Reset()
         {
             // TODO: Reset data?
         }
-
-        ushort robotId = 0;
 
         /// <summary>
         ///     Process one frame of the simulation
@@ -98,7 +94,7 @@ namespace AmazonSimulator.Controllers
             //  Initialize the game logic.
             if (game == null)
             {
-                game = new SimulationLogic(world, 2, 1);
+                game = new SimulationLogic(world, 2, 10);
             }
             else
             {
