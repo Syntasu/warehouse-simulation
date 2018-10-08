@@ -49,7 +49,7 @@ namespace AmazonSimulator.Game.Controllers
         {
             for (int i = 0; i < robotCount; i++)
             {
-                world.AddEntity<Robot>(Vector3.Zero, Vector3.Zero);
+                world.AddEntity<Robot>(new Vector3(10, 10, 10), Vector3.Zero);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using AmazonSimulator.Commands;
 using AmazonSimulator.Framework.Patterns;
 using AmazonSimulator.Game.Data;
+using Newtonsoft.Json;
 
 namespace AmazonSimulator.Game.Commands
 {
@@ -26,7 +27,7 @@ namespace AmazonSimulator.Game.Commands
             Command cmd = null;
             Entity e = Entity.FromJson(args.Content);
 
-            if(args.Action == "add")
+            if (args.Action == "add")
             {
                 cmd = new CommandCreateEntity(e.Id, e.Type, e.Position, e.Rotation);
             }

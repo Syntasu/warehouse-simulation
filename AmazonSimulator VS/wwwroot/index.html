@@ -15,7 +15,7 @@
             var camera, scene, renderer;
             var cameraControls;
 
-            var worldObjects = {};
+            var entities = {};
 
             function init()
             {
@@ -42,15 +42,12 @@
                 plane.position.z = 15;
                 scene.add(plane);
 
-
-
                 // Lightning
                 var ambientLight = new THREE.AmbientLight(0x404040, 0.5);
                 scene.add(ambientLight);
                 var directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
                 directionalLight.position.set(75, 45, 75);
                 scene.add(directionalLight)
-
 
                 //Skybox Sphere
                 scene.add(new THREE.Mesh(new THREE.SphereGeometry(750, 12, 12), new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load("textures/skybox.jpg"), side: THREE.DoubleSide })));
@@ -107,6 +104,7 @@
                 tWall.position.y = 1;
                 tWall.position.z = 29.85;
                 scene.add(tWall);
+
                 // bottom wall Left side
                 var geometry = new THREE.BoxGeometry(2.5, 2, 0.25)
                 var material = new THREE.MeshLambertMaterial({ color: 0xFFFF00 });
@@ -115,6 +113,7 @@
                 bWall1.position.y = 0;
                 bWall1.position.z = -22.725;
                 tWall.add(bWall1);
+
                 // bottom wall Right Side
                 var bWall2 = new THREE.Mesh(geometry, material);
                 bWall2.position.x = -8.5;
@@ -141,9 +140,10 @@
             exampleSocket.onmessage = function (event)
             {
                 var recv = JSON.parse(event.data);
+                console.log(recv);
 
                 // Are we dealing with a entity command?
-                if (recv.includes("entity"))
+                if (recv.command.includes("entity"))
                 {
                     var id = recv.id;
                     var type = recv.type.toLowerCase();
@@ -165,10 +165,12 @@
                             return;
                         }
 
-                        //Set entitu position.
+                        //Set entity position.
                         entity.position.x = recv.px;
                         entity.position.y = recv.py;
                         entity.position.z = recv.pz;
+
+                        console.log(recv.px);
 
                         //Set entity rotation/
                         entity.rotation.x = recv.rx;
@@ -176,46 +178,9 @@
                         entity.rotation.z = recv.rz;
 
                         scene.add(entity);
+                        entities[id] = entity;
                     }
                 }
-
-                //if (command.command == "update") {
-                //    if (Object.keys(worldObjects).indexOf(command.parameters.guid) < 0) {
-                //        // Robots
-                //        if (command.parameters.type == "robot") {
-                //            var robot = new Robot();
-
-                //            scene.add(robot);
-                //            worldObjects[command.parameters.guid] = robot;
-                //        }
-                //        // Truck
-                //        if (command.parameters.type == "Truck") {
-                //            var Truck = new Truck();
-
-                //            scene.add(Truck);
-                //            worldObjects[command.parameters.guid] = Truck;
-                //        }
-                //        // shellfs
-                //        if (command.parameters.type == "Shelf") {
-                //            var Shelf = new Shelf();
-
-                //            scene.add(Shelf);
-                //            worldObjects[command.parameters.guid] = Shelf;
-                //        }
-                //    }
-
-                //    var object = worldObjects[command.parameters.guid];
-
-                //    object.position.x = command.parameters.Position.X;
-                //    object.position.y = command.parameters.Position.Y;
-                //    object.position.z = command.parameters.Position.Z;
-
-                //    object.rotation.x = command.parameters.Rotation.X;
-                //    object.rotation.y = command.parameters.Rotation.Y;
-                //    object.rotation.z = command.parameters.Rotation.Z;
-
-                //    object.children[0].userData.status = command.parameters.status;
-                //}
             }
 
             init();

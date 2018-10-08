@@ -1,8 +1,11 @@
-﻿namespace AmazonSimulator.Data
+﻿using System;
+
+namespace AmazonSimulator.Data
 {
     /// <summary>
     ///     A 3 dimensional vector.
     /// </summary>
+    [System.Serializable]
     public class Vector3
     {
         /// <summary>
@@ -21,11 +24,32 @@
             Set(x, y, z);
         }
 
+        public Vector3(string vectorStr)
+        {
+            string[] fields = vectorStr.Split(',');
+
+            if (fields.Length == 3)
+            {
+                X = float.Parse(fields[0]);
+                Y = float.Parse(fields[1]);
+                Z = float.Parse(fields[2]);
+            }
+            else
+            {
+                Console.WriteLine("Cannot create vector3 from malformed string");
+            }
+        }
+
         public void Set(float x, float y, float z)
         {
             X = x;
             Y = y;
             Z = z;
+        }
+
+        public override string ToString()
+        {
+            return $"{X.ToString()}, {Y.ToString()}, {Z.ToString()}";
         }
 
         public void ToStringList(out string sx, out string sy, out string sz)
