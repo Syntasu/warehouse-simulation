@@ -10,15 +10,13 @@
 
         var exampleSocket;
 
-        window.onload = function ()
-        {
+        window.onload = function () {
             var camera, scene, renderer;
             var cameraControls;
 
             var entities = {};
 
-            function init()
-            {
+            function init() {
                 camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
                 cameraControls = new THREE.OrbitControls(camera);
                 camera.position.z = 15;
@@ -122,64 +120,70 @@
                 tWall.add(bWall2);
             }
 
-            function onWindowResize()
-            {
+            function onWindowResize() {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
 
-            function animate()
-            {
+            function animate() {
                 requestAnimationFrame(animate);
                 cameraControls.update();
                 renderer.render(scene, camera);
             }
 
             exampleSocket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/connect_client");
-            exampleSocket.onmessage = function (event)
-            {
+            exampleSocket.onmessage = function (event) {
                 var recv = JSON.parse(event.data);
-                console.log(recv);
 
                 // Are we dealing with a entity command?
-                if (recv.command.includes("entity"))
-                {
+                if (recv.command.includes("entity")) {
                     var id = recv.id;
                     var type = recv.type.toLowerCase();
                     var entity = null;
 
-                    if (recv.command == "create_entity")
-                    {
-                        if (type == "robot") {
-                            entity = new Robot();
-                        }
-                        else if (type == "truck") {
-                            entity = new Truck();
-                        }
-                        else if (type == "rack") {
-                            entity = new Shelf();
-                        }
-                        else {
-                            console.log(type + " is not a valid entity type.");
-                            return;
-                        }
-
-                        //Set entity position.
-                        entity.position.x = recv.px;
-                        entity.position.y = recv.py;
-                        entity.position.z = recv.pz;
-
-                        console.log(recv.px);
-
-                        //Set entity rotation/
-                        entity.rotation.x = recv.rx;
-                        entity.rotation.y = recv.ry;
-                        entity.rotation.z = recv.rz;
-
-                        scene.add(entity);
-                        entities[id] = entity;
+                    switch (recv.command) {
+                        case "create_entity":
+                            HandleEntityCreate(id, type, recv.px, recv.py, recv.z, recv.rx, recv.ry, recv.rz);
+                            break;
                     }
+
+                }
+            }
+
+            // Handles any incomong create_entity packers.
+            function HandleEntityCreate(id, type, px, py, pz, rx, ry, rz) {
+                var entity = null;
+
+                switch (type) {
+                    case "robot":
+                        entity = new Robot();
+                        break;
+                    case "truck":
+                        entity = new Truck();
+                        break;
+                    case "rack":
+                        entity = new Shelf();
+                        break;
+                }
+
+                if (entity != null) {
+                    //NOTE: Using the OR (||) to prevent passing undefined values,
+                    //      This will cause the model to dissapear without an error or so.
+                    entity.position.x = px || 0;
+                    entity.position.y = py || 0; 
+                    entity.position.z = pz || 0;
+                    entity.rotation.x = rx || 0;
+                    entity.rotation.y = ry || 0;
+                    entity.rotation.z = rz || 0;
+
+                    scene.add(entity);
+                    entities[id] = entity;
+
+                    console.log("Created entity with id " + id);
+                }
+                else {
+                    console.log("Could not create entity!");
                 }
             }
 
