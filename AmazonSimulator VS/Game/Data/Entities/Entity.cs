@@ -14,6 +14,7 @@ namespace AmazonSimulator.Game.Data
 
         public Vector3 Position { get; protected set; } = Vector3.Zero;
         public Vector3 Rotation { get; protected set; } = Vector3.Zero;
+        public bool IsDirty { get; protected set; } = false;
 
         public Entity(ushort entityId, EntityType type, Vector3 position = null, Vector3 rotation = null)
         {
@@ -21,16 +22,24 @@ namespace AmazonSimulator.Game.Data
             Type = type;
             Position = position;
             Rotation = rotation;
+            IsDirty = true;
         }
 
         public void SetEntityPosition(Vector3 position)
         {
             Position = position;
+            IsDirty = true;
         }
 
         public void SetEntityRotation(Vector3 rotation)
         {
             Rotation = rotation;
+            IsDirty = true;
+        }
+
+        public void ResetDirty()
+        {
+            IsDirty = false;
         }
 
         public override string ToString()

@@ -33,7 +33,10 @@ namespace AmazonSimulator.Game.Data
 
                 if(distance > 0.5f)
                 {
-                    Position.X += speed;
+                    Vector3 p = Position;
+                    p.X += speed;
+
+                    SetEntityPosition(p);
                 }
                 else
                 {

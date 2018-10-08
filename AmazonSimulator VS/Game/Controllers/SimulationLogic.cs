@@ -26,7 +26,7 @@ namespace AmazonSimulator.Game.Controllers
         /// <summary>
         ///     How many trucks do we need to spawn? (1 means 1 per minute.)
         /// </summary>
-        private int truckRate = 3;
+        private int truckRate = 1;
 
         /// <summary>
         ///     When the last truck was spawned.

@@ -69,7 +69,12 @@ namespace AmazonSimulator.Models
         {
             int index = Entities.IndexOf(entity);
             Entity entityFromCollection = Entities[index];
-            Entities[index] = entity;
+
+            if (entity.IsDirty)
+            {
+                Entities[index] = entity;
+                entity.ResetDirty();
+            }
         }
 
     }
