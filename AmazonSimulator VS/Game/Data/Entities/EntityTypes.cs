@@ -4,7 +4,7 @@
     {
         Entity,
         Robot,
-        Rack,
+        Shelf,
         Truck,
     }
 }

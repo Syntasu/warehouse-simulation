@@ -1,8 +1,8 @@
 ﻿namespace AmazonSimulator.Game.Data
 {
-    public class Rack : Entity
+    public class Shelf : Entity
     {
-        public Rack(ushort id) : base(id, EntityType.Rack)
+        public Shelf(ushort id) : base(id, EntityType.Shelf)
         {
         }
     }
