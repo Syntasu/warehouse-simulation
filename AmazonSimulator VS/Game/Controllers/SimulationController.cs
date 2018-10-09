@@ -24,7 +24,7 @@ namespace AmazonSimulator.Controllers
         /// <summary>
         ///     How many ticks we should run at.
         /// </summary>
-        private int tickRate = 5;
+        private int tickRate = 60;
 
         /// <summary>
         ///     The thread we run the game logic on.
@@ -94,7 +94,7 @@ namespace AmazonSimulator.Controllers
             //  Initialize the game logic.
             if (game == null)
             {
-                game = new SimulationLogic(world, 2, 10);
+                game = new SimulationLogic(world, 2, 120);
             }
             else
             {

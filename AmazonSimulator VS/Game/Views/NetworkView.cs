@@ -76,14 +76,25 @@ namespace AmazonSimulator.Views
         private async Task Send(string message)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(message);
+            ArraySegment<byte> messageSegment = new ArraySegment<byte>(buffer, 0, message.Length);
+
+            //NOTE: Workaround, don't shit yourself when receiving > 50 messages/second
+            Monitor.Enter(Socket);
 
             try
             {
-                await Socket.SendAsync(new ArraySegment<byte>(buffer, 0, message.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                try
+                {
+                    await Socket.SendAsync(messageSegment, WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error while sending information to client, probably a Socket disconnect..." + e.Message);
+                }
             }
-            catch (Exception)
+            finally
             {
-                Console.WriteLine("Error while sending information to client, probably a Socket disconnect");
+                Monitor.Exit(Socket);
             }
         }
     }
